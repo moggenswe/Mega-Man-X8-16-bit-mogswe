@@ -53,6 +53,11 @@ Same underlying decompiler bug (int literal where a float was needed), same sile
 - **Boss visual repositioning with nothing chained after it:** `src/Actors/Bosses/GiantMechaniloid/Laser.gd` (laser eye slides into position; no callback depends on when this finishes).
 - **Enemy dive wind-up dip:** `src/Actors/Enemies/MantaRay/MantaDive.gd` — this one *is* a chained step before the actual dive movement, so in principle the dive could have started ~0.5s sooner in the broken state, similar to fix #3 above. Flagging this explicitly since I can't rule out a small (~0.5s) timing shift to this specific enemy's dive attack the same way I confirmed for #3. If you route through Manta Ray/CentralWhite competitively, this is worth testing directly.
 
+### Charge-up sound didn't speed up to match Hermes Head's charge time reduction
+**File:** `Charge.gd` — not a decompiler artifact, sourced from an existing fix proposed upstream: [AlyssonDaPaz/Mega-Man-X8-16-bit#4](https://github.com/AlyssonDaPaz/Mega-Man-X8-16-bit/pull/4).
+
+Equipping Hermes Head sets `charge_time_reduction = 0.45`, which makes the *visual* charge level thresholds (`get_charge_level()`) trigger ~45% faster. The charge-up sound and the max-charge cue, however, always played at their normal recorded speed — so with Hermes Head equipped, the audio no longer matched how quickly the weapon was actually charging (e.g. the "fully charged" visual/mechanical state could be reached well before the sound's own buildup would suggest). Fixed by scaling `pitch_scale` on both the charge-up sound and the max-charge sound by `1.0 / (1.0 - charge_time_reduction)` — with Hermes Head's 0.45 reduction this works out to ≈1.818x speed, matching the mechanical speed-up exactly. No effect without Hermes Head equipped (`charge_time_reduction == 0` keeps `pitch_scale` at the normal `1.0`). Doesn't change `charge_time_reduction` itself, any charge threshold, or any timing — purely brings the audio in line with mechanics that were already there.
+
 ## Crash fixes (no gameplay behavior changed at all)
 
 ### `src/System/InputManager.gd`
