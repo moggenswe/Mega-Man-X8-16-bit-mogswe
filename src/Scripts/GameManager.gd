@@ -597,6 +597,11 @@ func save_debug_state() -> void :
 	var weapon_ammo = {}
 	for weapon in shot.weapons:
 		weapon_ammo[weapon.name] = weapon.current_ammo
+	var riding_scene_path = ""
+	var riding_health = 0.0
+	if player.ride and is_instance_valid(player.ride):
+		riding_scene_path = player.ride.filename
+		riding_health = player.ride.current_health
 	debug_save_state = {
 		"stage": current_level,
 		"position": player.global_position,
@@ -610,8 +615,10 @@ func save_debug_state() -> void :
 		"global_variables": GlobalVariables.variables.duplicate(true),
 		"rng_seed": BossRNG.seed_rng,
 		"last_door": checkpoint.last_door if checkpoint else NodePath(),
+		"riding_scene_path": riding_scene_path,
+		"riding_health": riding_health,
 	}
-	print("GameManager: Debug save state captured at " + current_level + " " + str(player.global_position))
+	print("GameManager: Debug save state captured at " + current_level + " " + str(player.global_position) + (" (riding " + riding_scene_path + ")" if riding_scene_path != "" else ""))
 
 func load_debug_state() -> void :
 	if debug_save_state.empty():
@@ -651,4 +658,32 @@ func _finish_loading_debug_state(state) -> void :
 		if weapon.name == state["current_weapon_name"]:
 			shot.set_current_weapon(weapon)
 			break
+	if state.get("riding_scene_path", "") != "":
+		mount_player_on_ride(state["riding_scene_path"], state["riding_health"])
 	print("GameManager: Debug save state loaded.")
+
+func mount_player_on_ride(scene_path: String, ride_health: float) -> void :
+	var ride_scene = load(scene_path)
+	if not ride_scene:
+		print_debug("GameManager: Couldn't load saved ride scene: " + scene_path)
+		return
+	var ride_instance = ride_scene.instance()
+	get_tree().current_scene.add_child(ride_instance, true)
+	ride_instance.global_position = player.global_position
+	ride_instance.current_health = ride_health
+	var bike_mount = ride_instance.get_node_or_null("Riden")
+	if bike_mount:
+		# Bike (BikeRiden.gd extends src/Actors/Props/Ride.gd): make_rider()
+		# takes the collision body directly.
+		bike_mount.make_rider(player.get_node("Enemy Collision Detector"))
+		return
+	var armor_mount = ride_instance.get_node_or_null("Ride")
+	if armor_mount:
+		# Ride Armor (src/Actors/Props/RideArmor/Ride.gd, NewAbility-based):
+		# make_rider() takes no arguments, "rider" must be set first and
+		# execution triggered manually via _on_signal().
+		armor_mount.rider = player
+		armor_mount.recent_rider = player
+		armor_mount._on_signal()
+		return
+	print_debug("GameManager: Saved ride scene has no Ride/Riden node: " + scene_path)
