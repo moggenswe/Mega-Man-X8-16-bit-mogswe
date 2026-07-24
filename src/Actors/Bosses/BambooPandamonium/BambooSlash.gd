@@ -14,6 +14,7 @@ onready var claw_retreat: AudioStreamPlayer2D = $claw_retreat
 
 signal cancel
 signal slashed
+signal ready_for_stun
 
 func _Setup():
 	current_degree = 0
@@ -39,6 +40,7 @@ func _Update(_delta) -> void :
 		play_animation("slash_prepare")
 		create_slashes()
 		turn_and_face_player()
+		emit_signal("ready_for_stun")
 		next_attack_stage()
 		
 	elif attack_stage == 4 and has_finished_last_animation():

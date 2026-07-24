@@ -319,9 +319,6 @@ volume_db = -6.555
 max_distance = 600.0
 bus = "SFX"
 
-[node name="VileAchievementUnlocker" type="Node" parent="."]
-script = ExtResource( 34 )
-
 [node name="RNGUpdate" type="Node" parent="."]
 script = ExtResource( 35 )
 

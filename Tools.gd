@@ -127,7 +127,8 @@ static func tween(parent, property, final_value, duration, ease_type: = Tween.EA
 static func tween_method(parent, method, start_value, final_value, duration) -> void :
 	var tween: SceneTreeTween = parent.create_tween()
 
-	tween.tween_method(parent, method, start_value, final_value, duration)
+	var values = TweenController.match_value_types(start_value, final_value)
+	tween.tween_method(parent, method, values[0], values[1], duration)
 
 static func raycast(object: Node2D, local_target_position: Vector2, start_position = null, collision_layer = 1) -> Dictionary:
 	if start_position == null:

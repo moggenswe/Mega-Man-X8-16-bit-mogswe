@@ -16,7 +16,7 @@ func _on_ElevatorStarter_body_entered(body: Node) -> void :
 
 func _on_rising_platform_at_max() -> void :
 	GameManager.camera.on_area_exit(limit_to_deactivate)
-	Event.emit_signal("screenshake")
+	Event.emit_signal("screenshake", 0.7)
 	limit_to_deactivate.disable()
 	limit_to_deactivate2.disable()
 	GameManager.camera.remove_disabled_areas()

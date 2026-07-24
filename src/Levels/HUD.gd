@@ -116,7 +116,9 @@ func tween_focus_on_bar(focus_bar, other_bar, x_pos, color) -> void :
 
 func setup_boss_health(_boss):
 	boss = _boss
-	boss.get_node("Damage").connect("took_damage", boss_bar, "blink")
+	var damage_node = boss.get_node("Damage")
+	if not damage_node.is_connected("took_damage", boss_bar, "blink"):
+		damage_node.connect("took_damage", boss_bar, "blink")
 
 func show_debug_text() -> void :
 	if is_instance_valid(debugging_character):
