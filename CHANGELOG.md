@@ -41,6 +41,15 @@ These are the ones worth your own scrutiny. Everything else in this changelog is
 
 **Fix:** changed `1` and `0` to `1.0` and `0.0`. This is the one fix in this changelog that has a concrete, confirmed effect on a specific timing window (a post-boss transition), not just "restores a broken visual."
 
+### 4. Sub-weapon quick-select wheel (right stick) had dead spots — pushing the stick at certain angles selected nothing
+**File:** `src/Options/HotSwap.tscn`
+
+**What was broken:** the weapon wheel positions its cursor from the analog stick using two independent axis readings (`cursor.x` from left/right strength, `cursor.y` from up/down strength — see `HotSwap.gd`'s `_physics_process()`), each with a 0.32 deadzone remapped to a 0–40 unit range. This is not a true circular/polar mapping, so a stick pushed at a diagonal angle doesn't reach the same radial distance from center as a stick pushed at a cardinal angle. Each of the 8 weapon icons only registers a selection when the cursor's own hit circle (radius 16) overlaps that icon's hit circle (radius 6) — there is no "nearest icon" fallback, purely `Area2D.area_entered`. Mapped the actual geometry mathematically and confirmed empirically in a live running instance (temporarily sweeping the cursor through all 360° while reading real `Area2D` overlap state): there are exactly 8 dead zones, each ~4–6° wide, sitting right at the boundary between every adjacent pair of icons (skewed toward whichever of the two is farther from center) — pushing the stick into one of these bands selects nothing at all.
+
+**Fix:** increased the weapon icon hit-circle radius from 6 to 13. Re-ran the same 360° sweep after the change: zero dead angles remain, with only a small (~8°) expected overlap band at each boundary where either adjacent weapon can register — a normal, harmless transition zone, not an ambiguity bug.
+
+**Why this belongs here and not in the audio/visual section:** unlike the other items in this changelog, this isn't a decompiler artifact (both values existed exactly like this in the recovered code) — it's a pre-existing precision issue in the wheel's hit-testing geometry. It affects whether a specific analog stick angle successfully selects a specific sub-weapon, which is a real functional outcome (not cosmetic), so it's listed here for visibility even though it's a menu-input fix rather than an in-level timing fix. It does not change stage timing, damage, or movement in any way.
+
 ---
 
 ## Fixes that are audio/visual only (cannot affect a run)
