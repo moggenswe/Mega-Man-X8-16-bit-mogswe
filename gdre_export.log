@@ -1,0 +1,165 @@
+GDRE Tools v2.6.0
+Windows 10.0.26200, headless
+Opening file: C:/Project/x8d-v2/original/Mega Man X8 16-bit 1.0.0.9 Speedrun v10.exe
+Multiple passing candidates for bytecode version 13:
+3.5.0-stable (a7aad78), 3.2.0-stable (5565f55)
+Choosing only one that matches engine version: 3.5.0-stable (a7aad78).
+Loaded 2265 imported files
+WARNING: No assembly file 'Mega Man X8 16-bit.dll' found in any directory in C:/Project/x8d-v2/original and no C# files found, assuming it's not a C# project
+   at: GDRESettings::load_project_dotnet_assembly (modules\gdsdecomp\utility\gdre_settings.cpp:2879)
+Detected Engine Version: 3.5.3
+Detected Bytecode Revision: 3.5.0-stable (a7aad78)
+Successfully loaded PCK!
+Version: 3.5.3
+Verified 5617 files, no errors detected!
+Extracted 5617 files, no errors detected!
+Recreating plugin configs...
+Loading resource strings, this may take a while!!
+ERROR: Failed to load resource: res://src/Levels/PitchBlack/PitchBlack_worldmap.world
+ERROR: Unrecognized binary resource file: 'res://src/Levels/PitchBlack/PitchBlack_worldmap.world'.
+ 
+   at: ResourceLoaderCompatBinary::open (modules\gdsdecomp\compat\resource_compat_binary.cpp:1170)
+
+   at: GDRESettings::_do_string_load (modules\gdsdecomp\utility\gdre_settings.cpp:2643)
+Resource strings loaded!
+Saved project config.
+
+
+********************************EXPORT REPORT********************************
+
+Totals:                                 
+Decompiled scripts:                     983
+Scripts not decompiled:                 0
+Imported resources for export session:  2265
+Successfully converted:                 2179
+Lossy:                                  0
+Rewrote metadata:                       0
+Non-importable conversions:             0
+Not converted:                          86
+Failed conversions:                     0
+-------------
+
+------
+
+The following files were not converted because support has not been implemented yet:
+res://.import/MetalValleyTileset.tsx-6afe7863ad45fa5864e5f175dcc11acd.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to MetalValleyTileset.tsx
+res://.import/BoosterForestTileset.tsx-7cd00d3637eeffe7fa318aa1ab11682f.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to BoosterForestTileset.tsx
+res://.import/boosterforest_bg.tmx-4c1af69034eee4f29ca483c5da7b42c3.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to boosterforest_bg.tmx
+res://.import/boosterforest_bush.tmx-e454842dcb638ef1967c92378300712c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to boosterforest_bush.tmx
+res://.import/boosterforest_fountain.tmx-b52ed74409e34d34766ec4266a3ce91f.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to boosterforest_fountain.tmx
+res://.import/boosterforest_full.tmx-0e26aa126f0180075e6d65c47f353640.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to boosterforest_full.tmx
+res://.import/_centralwhite_1.tmx-df880b7cb8c46b8fe5e9d7f7e88a1240.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhite_1.tmx
+res://.import/_centralwhite_2.tmx-9ea3b6cc279bf506e75d16ad34dfffed.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhite_2.tmx
+res://.import/_centralwhite_3.tmx-0c526c13440b7b8ab196ba04d77b69fe.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhite_3.tmx
+res://.import/_centralwhite_4.tmx-ce76fe9b08c49e885854155977dff9ee.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhite_4.tmx
+res://.import/_centralwhite_5.tmx-8548eef0137cd4ae02cd428d0d4cd44c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhite_5.tmx
+res://.import/_centralwhiteextra.tmx-dfe51a2eb12e69acc1a61f0439e58733.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _centralwhiteextra.tmx
+res://.import/_map.tmx-2343bf7a07831458a208b50a92e2d37f.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _map.tmx
+res://.import/hidden_path.tmx-6562a80edab86e7c0f3ec61668211619.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to hidden_path.tmx
+res://.import/tileset_centralwhite.tsx-44e625c7d0ed28cd833b481f044a0549.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to tileset_centralwhite.tsx
+res://.import/DynastyTileset.tsx-96a2b0a49688ca32f9bc9d160e0fe19a.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to DynastyTileset.tsx
+res://.import/_dynasty_1.tmx-db02deffc757c3259f5fd5b51d031fb3.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_1.tmx
+res://.import/_dynasty_10.tmx-c18ad2a1f2d00f2414d5ec0be135948a.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_10.tmx
+res://.import/_dynasty_2.tmx-59a6d465edcfbb7c00ac58798b1a3384.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_2.tmx
+res://.import/_dynasty_3.tmx-184744d6c0be2f2a8f67b39c322f5ae4.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_3.tmx
+res://.import/_dynasty_4.tmx-a10a539998d57cdf44e01dfcf9db58cd.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_4.tmx
+res://.import/_dynasty_5.tmx-acce7123a774bc7a95bcda8ddca4c928.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_5.tmx
+res://.import/_dynasty_6.tmx-f7c1c98883773f65eb038b785b5da436.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_6.tmx
+res://.import/_dynasty_7.tmx-20d8f4cf052653444bb773f844c307c6.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_7.tmx
+res://.import/_dynasty_8.tmx-19a49ff9a63d66cb17e05cc5843e182f.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_8.tmx
+res://.import/_dynasty_9.tmx-424b771764a385ca36a91455fae471cd.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynasty_9.tmx
+res://.import/_dynastyextra.tmx-c35cd5a5c968ea4c92e07198bcb90428.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _dynastyextra.tmx
+res://.import/dynasty_full.tmx-97fbd38f1080b84976ecc8a2ec672a90.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to dynasty_full.tmx
+res://.import/GatewayAntonionTiled.tmx-fdf6137e396ab59d86a2dc39de821edd.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayAntonionTiled.tmx
+res://.import/GatewayManowarTiled.tmx-4c812320af7badd2c8d0518eb5620a4c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayManowarTiled.tmx
+res://.import/GatewayMantisTiled.tmx-5f0e3869d2b4b7596f5a0ba42758f08c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayMantisTiled.tmx
+res://.import/GatewayPandaTiled.tmx-d7f786f20b13f64ef33a88ded200d38e.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayPandaTiled.tmx
+res://.import/GatewayRoosterTiled.tmx-f3f985d03cbc30d563d0d459faca6355.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayRoosterTiled.tmx
+res://.import/GatewaySunflowerTiled.tmx-8e93f08a18e5ff810339f2f37dc67bf8.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewaySunflowerTiled.tmx
+res://.import/GatewayTiled.tmx-8c10b6d144217694550ecc58bba50019.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayTiled.tmx
+res://.import/GatewayTileset.tsx-3e3d17eca55507d4c3d50b11f4c8e9a6.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to GatewayTileset.tsx
+res://.import/GatewayTrilo.tmx-843d535f33df4a821560da5cb11bf284.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayTrilo.tmx
+res://.import/GatewayYetiTiled.tmx-c52e268557d7dc6da963d9f6bbc7a881.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to GatewayYetiTiled.tmx
+res://.import/_inferno_1.tmx-6e9b19dcab89b330e0dc0046a09f52cf.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _inferno_1.tmx
+res://.import/_inferno_2.tmx-9f9aa7923d2ada7132926a9a459bbc56.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _inferno_2.tmx
+res://.import/_inferno_3.tmx-8fb7da7d26e36ae40a03c5237e124250.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _inferno_3.tmx
+res://.import/_inferno_35.tmx-a5102399689dea48803f5b430121bc76.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _inferno_35.tmx
+res://.import/_inferno_4.tmx-70c145abf70f8de229bb1ede1d9ed51c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _inferno_4.tmx
+res://.import/_map.tmx-49881711c37ff36c6b64b5e7898e3b42.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to _map.tmx
+res://.import/tileset_inferno.tsx-2c7561810f6a6a7cd1c8bb90267c136f.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to tileset_inferno.tsx
+res://.import/jakobelevator_full.tmx-58a24f877791e26748ae0e6358ec71b1.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to jakobelevator_full.tmx
+res://.import/metalvalley_full.tmx-867fa838a70179c27b760130209845cb.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to metalvalley_full.tmx
+res://.import/tileset_metalvalley.tsx-2c751ece60b3f81d0e2fc41879669e19.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to tileset_metalvalley.tsx
+res://.import/Inferno.tsx-cba3cb37403466ef6120001fc387fad1.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to Inferno.tsx
+res://.import/NoahsPark.tsx-7d241d444c7005a41b8d8c829cb34040.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to NoahsPark.tsx
+res://.import/tiled_ceilingdoor.tmx-73a071e06e99e0c060e72b375cb362ad.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_ceilingdoor.tmx
+res://.import/tiled_corkscrew.tmx-12cc2a59ab7d7bf1322095d0b9cf0c2c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_corkscrew.tmx
+res://.import/tiled_doorcover.tmx-6cea89a9f307962afcfd9465001e8564.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_doorcover.tmx
+res://.import/tiled_noahspark.tmx-43698d3fe9d7dea2a3eb006928241799.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_noahspark.tmx
+res://.import/tiled_press.tmx-c7c48a13d126ea9ea084784131b6089c.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_press.tmx
+res://.import/tiled_waterfall1.tmx-356aa44d9dfd6b07604b46634867e053.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_waterfall1.tmx
+res://.import/tiled_waterfall2.tmx-b4c1998e9ad1751df5333771c0ea3b4b.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_waterfall2.tmx
+res://.import/tiled_waterfall3.tmx-09308376d8112a4bbf2868a4f0518c72.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to tiled_waterfall3.tmx
+res://.import/pitchblack_s1.tmx-616d6f59aeabba9eeab2753772958799.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s1.tmx
+res://.import/pitchblack_s2.tmx-ae36a37679839dd2e4579b17e958ff74.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s2.tmx
+res://.import/pitchblack_s3.tmx-01a32e4c0c57af1aea252ca80ba8b0e1.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s3.tmx
+res://.import/pitchblack_s4.tmx-6133287821b9aac203ac2f1c4cc0758d.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s4.tmx
+res://.import/pitchblack_s5.tmx-f845e1d6891ac6c2419500b9393cc2b1.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s5.tmx
+res://.import/pitchblack_s6.tmx-59d4376572a0a30ee46f670ed6872736.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s6.tmx
+res://.import/pitchblack_s7.tmx-71d443f6ef96c8277c7c77e4de3c3782.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to pitchblack_s7.tmx
+res://.import/pitchblack_tileset.tsx-97f992a5c5487a46aa7fcc8a80c02f45.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to pitchblack_tileset.tsx
+res://.import/pitchblack_tileset2.tsx-f4e676ac2d614ce9030e1e36f4f8b9f3.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to pitchblack_tileset2.tsx
+res://.import/primrose_tileset.tsx-568edcf6361bc6147c333c2cfb04b8e1.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to primrose_tileset.tsx
+res://.import/room1.tmx-b837b5a12480fd143cdbf2d8ac191aea.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room1.tmx
+res://.import/room2.tmx-a8fc08eeb922c7e4737b1da8d3c503f8.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room2.tmx
+res://.import/room3.tmx-f22f0cbf0b98c3eb414c9b131b1c0bb9.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room3.tmx
+res://.import/room4.tmx-045cc45ea224bdedac1945e2c0b0d26b.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room4.tmx
+res://.import/room5.tmx-feedce5846596a95c6dd2bb499b3b3b6.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room5.tmx
+res://.import/room7.tmx-994160485c9663cb7d2474d94938af5a.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room7.tmx
+res://.import/room8.tmx-c8e86d60c23d4d177381901edd358f3a.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room8.tmx
+res://.import/room_capsule.tmx-e4e1d751fe395e510b3039189318eab3.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room_capsule.tmx
+res://.import/room_final.tmx-8057c89f2fd048e1d7304bee1939340f.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room_final.tmx
+res://.import/room_vile.tmx-37fb313c6625ccd0e874d799537a9bbc.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to room_vile.tmx
+res://.import/Jakob_Tileset.tsx-bc45da0d30b008082087d0c598463d3e.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to Jakob_Tileset.tsx
+res://.import/SigmaPalaceTileset.tsx-42da8cd497ee15109a259a1605a96b16.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to SigmaPalaceTileset.tsx
+res://.import/final_cutscene.tmx-aca19ba7fac40e5f730937fd4c41a437.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to final_cutscene.tmx
+res://.import/final_platform.tmx-215e50843d6af4e129608dc60250425e.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to final_platform.tmx
+res://.import/sigmapalace_full.tmx-998adea25a517436a6c360259d33498f.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to sigmapalace_full.tmx
+res://.import/TroiaBaseTileset.tsx-97fe7091582c641c0414f15e2d74a5c0.res ( importer: vnen.tiled_tileset_importer, type: TileSet, format: tsx) to TroiaBaseTileset.tsx
+res://.import/troiabase_bg.tmx-feff701bc6561253ca9c7b2278c6b6d4.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to troiabase_bg.tmx
+res://.import/troiabase_full.tmx-68c6dbdf38044850ecf7b69576dfe90b.scn ( importer: vnen.tiled_importer, type: PackedScene, format: tmx) to troiabase_full.tmx
+
+
+
+---------------------------------IMPORTANT NOTES----------------------------------
+
+
+Unsupported Resources Detected:
+The following resource types were detected in the project that conversion is not implemented for yet.
+See Export Report to see which resources were not exported.
+You will still be able to edit the project in the editor regardless.
+ - Resource Type: TileSet    Format: tsx      Importer: vnen.tiled_tileset_importer
+ - Resource Type: PackedScene Format: tmx      Importer: vnen.tiled_importer
+
+------
+Translation Export Incomplete:
+Could not recover 46/348 keys for res://src/Localization/X8TR.csv
+Could not recover 151/536 keys for res://src/Localization/test1.csv
+Too inaccurate, saved test1.csv to res://.assets/src/Localization/test1.csv
+Could not recover 147/508 keys for res://src/Localization/x8localization.csv
+Too inaccurate, saved x8localization.csv to res://.assets/src/Localization/x8localization.csv
+Could not recover 149/518 keys for res://src/Localization/x8localization_final.csv
+Too inaccurate, saved x8localization_final.csv to res://.assets/src/Localization/x8localization_final.csv
+Could not recover 149/518 keys for res://src/Localization/x8tr_1008.csv
+Too inaccurate, saved x8tr_1008.csv to res://.assets/src/Localization/x8tr_1008.csv
+
+
+
+
+------------------------------------------------------------------------------------
+
+Use Godot editor version 3.5.3 to edit the project.
+
+*******************************************************************************
+
+Recovery finished in 00m10s

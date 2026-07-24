@@ -1,0 +1,10 @@
+# Godot 3.x import cache (regenerated automatically when the project is opened in the editor)
+.import/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor swap/backup files
+*.tmp
+*~

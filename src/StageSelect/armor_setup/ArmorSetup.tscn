@@ -1,0 +1,795 @@
+[gd_scene load_steps=59 format=2]
+
+[ext_resource path="res://src/Options/tank_holder.png" type="Texture" id=1]
+[ext_resource path="res://src/Options/KeymapExit.gd" type="Script" id=2]
+[ext_resource path="res://src/Options/selectable_xhead.png" type="Texture" id=3]
+[ext_resource path="res://src/StageSelect/armor_setup/h_chest.png" type="Texture" id=4]
+[ext_resource path="res://src/StageSelect/armor_setup/base_head.png" type="Texture" id=5]
+[ext_resource path="res://src/Options/selectable_harms.png" type="Texture" id=6]
+[ext_resource path="res://src/Options/selectable_hhead.png" type="Texture" id=7]
+[ext_resource path="res://src/StageSelect/armor_setup/x_arms.png" type="Texture" id=8]
+[ext_resource path="res://src/StageSelect/armor_setup/h_neck.png" type="Texture" id=9]
+[ext_resource path="res://src/StageSelect/armor_setup/bg.png" type="Texture" id=10]
+[ext_resource path="res://src/StageSelect/armor_setup/base_body.png" type="Texture" id=11]
+[ext_resource path="res://src/StageSelect/armor_setup/i_helm.png" type="Texture" id=12]
+[ext_resource path="res://src/StageSelect/armor_setup/x_legs.png" type="Texture" id=13]
+[ext_resource path="res://src/StageSelect/armor_setup/i_legs.png" type="Texture" id=14]
+[ext_resource path="res://src/StageSelect/armor_setup/h_legs.png" type="Texture" id=15]
+[ext_resource path="res://src/StageSelect/armor_setup/i_neck.png" type="Texture" id=16]
+[ext_resource path="res://src/StageSelect/armor_setup/x_chest.png" type="Texture" id=17]
+[ext_resource path="res://src/StageSelect/armor_setup/x_helm.png" type="Texture" id=18]
+[ext_resource path="res://src/Options/selectable_iarms.png" type="Texture" id=19]
+[ext_resource path="res://src/Options/selectable_ibody.png" type="Texture" id=20]
+[ext_resource path="res://src/StageSelect/armor_setup/h_helm.png" type="Texture" id=21]
+[ext_resource path="res://src/StageSelect/armor_setup/h_arms.png" type="Texture" id=22]
+[ext_resource path="res://src/StageSelect/armor_setup/i_chest.png" type="Texture" id=23]
+[ext_resource path="res://src/StageSelect/armor_setup/i_arms.png" type="Texture" id=24]
+[ext_resource path="res://src/Options/selectable_hlegs.png" type="Texture" id=25]
+[ext_resource path="res://src/Options/selectable_hbody.png" type="Texture" id=26]
+[ext_resource path="res://src/Options/selectable_ihead.png" type="Texture" id=27]
+[ext_resource path="res://src/Options/selectable_ilegs.png" type="Texture" id=28]
+[ext_resource path="res://src/StageSelect/armor_setup/ArmorButton.gd" type="Script" id=29]
+[ext_resource path="res://src/Options/selectable_xarms.png" type="Texture" id=30]
+[ext_resource path="res://src/Options/selectable_xlegs.png" type="Texture" id=31]
+[ext_resource path="res://src/Options/selectable_xbody.png" type="Texture" id=32]
+[ext_resource path="res://src/StageSelect/armor_setup/VisualEquip.gd" type="Script" id=33]
+[ext_resource path="res://src/Fonts/Xclassicfont.fnt" type="BitmapFont" id=34]
+[ext_resource path="res://src/Options/pause_bg.png" type="Texture" id=35]
+[ext_resource path="res://src/Options/KeyBinder/KeyConfig.gd" type="Script" id=36]
+[ext_resource path="res://src/Options/CoverScreen.gd" type="Script" id=37]
+[ext_resource path="res://src/Sounds/FX - Menu Switch.ogg" type="AudioStream" id=38]
+[ext_resource path="res://src/Sounds/MM - Equip.wav" type="AudioStream" id=39]
+[ext_resource path="res://src/StageSelect/armor_setup/subtank_enabler.gd" type="Script" id=40]
+[ext_resource path="res://src/Options/selectable_lifeup.png" type="Texture" id=41]
+[ext_resource path="res://src/Options/selectable_subtank2.png" type="Texture" id=42]
+[ext_resource path="res://src/StageSelect/armor_setup/heart_enabler.gd" type="Script" id=43]
+[ext_resource path="res://src/AchievementSystem/icon_bg.png" type="Texture" id=44]
+[ext_resource path="res://src/AchievementSystem/Icons/achievicon_gigacrush.png" type="Texture" id=45]
+[ext_resource path="res://src/AchievementSystem/Icons/achievicon_xdrive.png" type="Texture" id=46]
+[ext_resource path="res://src/StageSelect/armor_setup/xdrive_icon.gd" type="Script" id=47]
+[ext_resource path="res://src/Effects/Textures/flash.png" type="Texture" id=48]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform bool grayscale = true;
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	float avg = (COLOR.r + COLOR.g + COLOR.b) /  3.5;
+	COLOR.rgb = COLOR.rgb;
+	if (grayscale){
+		COLOR.rgb = vec3(avg);
+	}
+} "
+
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/grayscale = false
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/grayscale = false
+
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/grayscale = true
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 48 )
+region = Rect2( 0, 0, 256, 64 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 48 )
+region = Rect2( 0, 64, 256, 64 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 48 )
+region = Rect2( 0, 128, 256, 64 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 48 )
+region = Rect2( 0, 192, 256, 64 )
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"loop": false,
+"name": "default",
+"speed": 24.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/grayscale = true
+
+[node name="ArmorSetup" type="CanvasLayer"]
+layer = 5
+script = ExtResource( 36 )
+menu_path = NodePath("Menu")
+initial_focus = NodePath("Menu/exit")
+exit_action = "select"
+
+[node name="Menu" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="bg" type="TextureRect" parent="Menu"]
+margin_right = 398.0
+margin_bottom = 224.0
+texture = ExtResource( 35 )
+
+[node name="textureRect" type="TextureRect" parent="Menu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 37.0
+margin_top = -16.0
+margin_right = 321.0
+margin_bottom = 200.0
+texture = ExtResource( 10 )
+
+[node name="Armor" type="Control" parent="Menu/textureRect"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 137.0
+margin_bottom = 207.0
+
+[node name="base_b" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 11 )
+
+[node name="body" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 17 )
+
+[node name="hermes_body" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 4 )
+
+[node name="icarus_body" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 23 )
+
+[node name="base_h" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 5 )
+
+[node name="head" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 18 )
+
+[node name="icarus_head" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 12 )
+
+[node name="hermes_head" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 21 )
+
+[node name="hermes_body_neck" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 9 )
+
+[node name="icarus_body_neck" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 16 )
+
+[node name="arms" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 8 )
+
+[node name="hermes_arms" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 22 )
+
+[node name="icarus_arms" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 24 )
+
+[node name="legs" type="TextureRect" parent="Menu/textureRect/Armor"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 13 )
+
+[node name="hermes_legs" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 15 )
+
+[node name="icarus_legs" type="TextureRect" parent="Menu/textureRect/Armor"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -53.5
+margin_top = -92.0
+margin_right = 53.5
+margin_bottom = 92.0
+texture = ExtResource( 14 )
+
+[node name="Options Group" type="Control" parent="Menu/textureRect"]
+margin_left = 146.0
+margin_top = 68.0
+margin_right = 275.0
+margin_bottom = 207.0
+
+[node name="ArmorParts" type="VBoxContainer" parent="Menu/textureRect/Options Group"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -47.5
+margin_right = 47.5
+margin_bottom = 128.0
+custom_constants/separation = 2
+alignment = 1
+
+[node name="HeadParts" type="HBoxContainer" parent="Menu/textureRect/Options Group/ArmorParts"]
+margin_top = 1.0
+margin_right = 95.0
+margin_bottom = 31.0
+custom_constants/separation = 2
+alignment = 1
+script = ExtResource( 33 )
+
+[node name="hermes_head" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/HeadParts"]
+margin_right = 30.0
+margin_bottom = 30.0
+focus_neighbour_top = NodePath("../../../../../exit")
+texture_normal = ExtResource( 7 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "HERMESHEAD_NAME"
+description = "HERMESHEAD_DISC"
+
+[node name="head" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/HeadParts"]
+margin_left = 32.0
+margin_right = 62.0
+margin_bottom = 30.0
+focus_neighbour_top = NodePath("../../../../../exit")
+texture_normal = ExtResource( 3 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "DEFAULTHEAD_NAME"
+description = "DEFAULTHEAD_DISC"
+
+[node name="icarus_head" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/HeadParts"]
+margin_left = 64.0
+margin_right = 94.0
+margin_bottom = 30.0
+focus_neighbour_top = NodePath("../../../../../exit")
+texture_normal = ExtResource( 27 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "ICARUSHEAD_NAME"
+description = "ICARUSHEAD_DISC"
+
+[node name="BodyParts" type="HBoxContainer" parent="Menu/textureRect/Options Group/ArmorParts"]
+margin_top = 33.0
+margin_right = 95.0
+margin_bottom = 63.0
+custom_constants/separation = 2
+alignment = 1
+script = ExtResource( 33 )
+
+[node name="hermes_body" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/BodyParts"]
+margin_right = 30.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 26 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "HERMESBODY_NAME"
+description = "HERMESBODY_DISC"
+
+[node name="body" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/BodyParts"]
+margin_left = 32.0
+margin_right = 62.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 32 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "DEFAULTBODY_NAME"
+description = "DEFAULTBODY_DISC"
+
+[node name="icarus_body" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/BodyParts"]
+margin_left = 64.0
+margin_right = 94.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 20 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "ICARUSBODY_NAME"
+description = "ICARUSBODY_DISC"
+
+[node name="ArmsParts" type="HBoxContainer" parent="Menu/textureRect/Options Group/ArmorParts"]
+margin_top = 65.0
+margin_right = 95.0
+margin_bottom = 95.0
+custom_constants/separation = 2
+alignment = 1
+script = ExtResource( 33 )
+
+[node name="hermes_arms" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/ArmsParts"]
+margin_right = 30.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 6 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "HERMESARMS_NAME"
+description = "HERMESARMS_DISC"
+
+[node name="arms" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/ArmsParts"]
+margin_left = 32.0
+margin_right = 62.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 30 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "DEFAULTARMS_NAME"
+description = "DEFAULTARMS_DISC"
+
+[node name="icarus_arms" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/ArmsParts"]
+margin_left = 64.0
+margin_right = 94.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 19 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "ICARUSARMS_NAME"
+description = "ICARUSARMS_DISC"
+
+[node name="LegsParts" type="HBoxContainer" parent="Menu/textureRect/Options Group/ArmorParts"]
+margin_top = 97.0
+margin_right = 95.0
+margin_bottom = 127.0
+custom_constants/separation = 2
+alignment = 1
+script = ExtResource( 33 )
+
+[node name="hermes_legs" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/LegsParts"]
+margin_right = 30.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 25 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "HERMESLEGS_NAME"
+description = "HERMESLEGS_DISC"
+
+[node name="legs" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/LegsParts"]
+margin_left = 32.0
+margin_right = 62.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 31 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "DEFAULTLEGS_NAME"
+description = "DEFAULTLEGS_DISC"
+
+[node name="icarus_legs" type="TextureButton" parent="Menu/textureRect/Options Group/ArmorParts/LegsParts"]
+margin_left = 64.0
+margin_right = 94.0
+margin_bottom = 30.0
+texture_normal = ExtResource( 28 )
+script = ExtResource( 29 )
+menu_path = NodePath("../../../../../..")
+legible_name = "ICARUSLEGS_NAME"
+description = "ICARUSLEGS_DISC"
+
+[node name="Description" type="Control" parent="Menu/textureRect"]
+margin_left = 147.0
+margin_top = 10.0
+margin_right = 274.0
+margin_bottom = 56.0
+
+[node name="name" type="Label" parent="Menu/textureRect/Description"]
+margin_top = -1.0
+margin_right = 127.0
+margin_bottom = 15.0
+custom_colors/font_color = Color( 0, 0.788235, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_fonts/font = ExtResource( 34 )
+text = "ARMORSETUP_TITLE"
+align = 1
+uppercase = true
+
+[node name="disc" type="Label" parent="Menu/textureRect/Description"]
+margin_left = 2.0
+margin_top = 15.0
+margin_right = 125.0
+margin_bottom = 63.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_fonts/font = ExtResource( 34 )
+text = "LOADOUT_DISC"
+autowrap = true
+uppercase = true
+
+[node name="exit" type="TextureButton" parent="Menu"]
+modulate = Color( 0.407843, 0.792157, 1, 1 )
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 220.0
+margin_top = 200.0
+margin_right = 315.0
+margin_bottom = 212.0
+rect_min_size = Vector2( 0, 12 )
+focus_neighbour_bottom = NodePath("../textureRect/Options Group/ArmorParts/HeadParts/head")
+action_mode = 0
+script = ExtResource( 2 )
+idle_color = Color( 0.407843, 0.792157, 1, 1 )
+focus_color = Color( 0.984314, 1, 0.686275, 1 )
+menu_path = NodePath("../..")
+
+[node name="text" type="Label" parent="Menu/exit"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -46.5
+margin_top = -9.0
+margin_right = 46.5
+margin_bottom = 5.0
+custom_colors/font_color_shadow = Color( 0.415686, 0.415686, 0.415686, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_fonts/font = ExtResource( 34 )
+text = "EXIT_BUTTON"
+align = 1
+uppercase = true
+
+[node name="subtank_holder" type="TextureRect" parent="Menu"]
+margin_left = 333.0
+margin_top = 59.0
+margin_right = 411.0
+margin_bottom = 115.0
+texture = ExtResource( 1 )
+
+[node name="subtank_enabler" type="TextureButton" parent="Menu/subtank_holder"]
+material = SubResource( 3 )
+margin_left = 12.0
+margin_top = 18.0
+margin_right = 32.0
+margin_bottom = 37.0
+texture_normal = ExtResource( 42 )
+script = ExtResource( 40 )
+menu_path = NodePath("../../..")
+
+[node name="Value" type="Label" parent="Menu/subtank_holder/subtank_enabler"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 5.0
+margin_top = -7.5
+margin_right = 33.0
+margin_bottom = 6.5
+custom_colors/font_color_shadow = Color( 0.415686, 0.415686, 0.415686, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_fonts/font = ExtResource( 34 )
+text = "X2"
+align = 1
+uppercase = true
+
+[node name="heart_holder" type="TextureRect" parent="Menu"]
+margin_left = 333.0
+margin_top = 101.0
+margin_right = 411.0
+margin_bottom = 157.0
+texture = ExtResource( 1 )
+
+[node name="heart_enabler" type="TextureButton" parent="Menu/heart_holder"]
+material = SubResource( 2 )
+margin_left = 13.0
+margin_top = 21.0
+margin_right = 33.0
+margin_bottom = 40.0
+texture_normal = ExtResource( 41 )
+flip_h = true
+script = ExtResource( 43 )
+menu_path = NodePath("../../..")
+
+[node name="Value" type="Label" parent="Menu/heart_holder/heart_enabler"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 2.0
+margin_top = -10.5
+margin_right = 30.0
+margin_bottom = 3.5
+custom_colors/font_color_shadow = Color( 0.415686, 0.415686, 0.415686, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_fonts/font = ExtResource( 34 )
+text = "X2"
+align = 1
+uppercase = true
+
+[node name="special_holder" type="TextureRect" parent="Menu"]
+margin_left = -13.0
+margin_top = 59.0
+margin_right = 65.0
+margin_bottom = 143.0
+texture = ExtResource( 1 )
+flip_h = true
+flip_v = true
+
+[node name="icon_bg" type="TextureRect" parent="Menu/special_holder"]
+modulate = Color( 1, 1, 1, 0.752941 )
+margin_left = 32.0
+margin_top = 13.0
+margin_right = 62.0
+margin_bottom = 43.0
+texture = ExtResource( 44 )
+
+[node name="icon" type="TextureRect" parent="Menu/special_holder"]
+modulate = Color( 1, 1, 1, 0.752941 )
+material = SubResource( 4 )
+margin_left = 35.0
+margin_top = 16.0
+margin_right = 59.0
+margin_bottom = 40.0
+texture = ExtResource( 46 )
+script = ExtResource( 47 )
+fullset_signal = "full_hermes"
+
+[node name="animatedSprite" type="AnimatedSprite" parent="Menu/special_holder"]
+position = Vector2( 48, 27 )
+z_index = 2
+frames = SubResource( 10 )
+frame = 3
+playing = true
+
+[node name="special_holder2" type="TextureRect" parent="Menu"]
+margin_left = -13.0
+margin_top = 101.0
+margin_right = 65.0
+margin_bottom = 185.0
+texture = ExtResource( 1 )
+flip_h = true
+
+[node name="icon_bg" type="TextureRect" parent="Menu/special_holder2"]
+modulate = Color( 1, 1, 1, 0.752941 )
+margin_left = 32.0
+margin_top = 13.0
+margin_right = 62.0
+margin_bottom = 43.0
+texture = ExtResource( 44 )
+
+[node name="icon" type="TextureRect" parent="Menu/special_holder2"]
+modulate = Color( 1, 1, 1, 0.75 )
+material = SubResource( 5 )
+margin_left = 35.0
+margin_top = 16.0
+margin_right = 59.0
+margin_bottom = 40.0
+texture = ExtResource( 45 )
+script = ExtResource( 47 )
+fullset_signal = "full_icarus"
+
+[node name="animatedSprite" type="AnimatedSprite" parent="Menu/special_holder2"]
+position = Vector2( 48, 27 )
+z_index = 2
+frames = SubResource( 10 )
+frame = 3
+playing = true
+
+[node name="Fader" type="ColorRect" parent="."]
+margin_right = 398.0
+margin_bottom = 224.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0 )
+script = ExtResource( 37 )
+menu = NodePath("../Menu")
+background = NodePath("../Menu/bg")
+
+[node name="choice" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 38 )
+volume_db = -4.0
+bus = "SFX"
+
+[node name="equip" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 39 )
+volume_db = -4.0
+bus = "SFX"
+
+[connection signal="initialize" from="." to="Menu/subtank_holder/subtank_enabler" method="setup"]
+[connection signal="initialize" from="." to="Menu/heart_holder/heart_enabler" method="setup"]
+[connection signal="unlocked_hermes" from="Menu/textureRect/Options Group/ArmorParts/HeadParts" to="Menu/special_holder/icon" method="display"]
+[connection signal="unlocked_icarus" from="Menu/textureRect/Options Group/ArmorParts/HeadParts" to="Menu/special_holder2/icon" method="display"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/hermes_head" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/head" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" to="Menu/textureRect/Options Group/ArmorParts/HeadParts/icarus_head" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/hermes_body" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/body" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" to="Menu/textureRect/Options Group/ArmorParts/BodyParts/icarus_body" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/hermes_arms" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/arms" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" to="Menu/textureRect/Options Group/ArmorParts/ArmsParts/icarus_arms" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/hermes_legs" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/legs" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" to="Menu/textureRect/Options Group/ArmorParts/LegsParts/icarus_legs" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/exit" to="Menu/exit" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/exit" to="Menu/exit" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/exit" to="Menu/exit" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/exit" to="Menu/exit" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/exit" to="Menu/exit" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/subtank_holder/subtank_enabler" to="Menu/subtank_holder/subtank_enabler" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/subtank_holder/subtank_enabler" to="Menu/subtank_holder/subtank_enabler" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/subtank_holder/subtank_enabler" to="Menu/subtank_holder/subtank_enabler" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/subtank_holder/subtank_enabler" to="Menu/subtank_holder/subtank_enabler" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/subtank_holder/subtank_enabler" to="Menu/subtank_holder/subtank_enabler" method="_on_pressed"]
+[connection signal="focus_entered" from="Menu/heart_holder/heart_enabler" to="Menu/heart_holder/heart_enabler" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Menu/heart_holder/heart_enabler" to="Menu/heart_holder/heart_enabler" method="_on_focus_exited"]
+[connection signal="mouse_entered" from="Menu/heart_holder/heart_enabler" to="Menu/heart_holder/heart_enabler" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/heart_holder/heart_enabler" to="Menu/heart_holder/heart_enabler" method="_on_mouse_exited"]
+[connection signal="pressed" from="Menu/heart_holder/heart_enabler" to="Menu/heart_holder/heart_enabler" method="_on_pressed"]
