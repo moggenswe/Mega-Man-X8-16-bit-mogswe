@@ -32,3 +32,15 @@ I traced the double-jump gating logic (`ExtraDashJump.gd`) thoroughly:
 - I ruled out one theory: platforms in this elevator chain only `queue_free()` once they're off-screen, which can't happen while a player is actively standing on one (it would still be on-screen, following the camera) — so "the platform disappears out from under you mid-jump" is not the mechanism.
 
 I could not confirm the wall-proximity hypothesis without either directly reproducing it in-game or inspecting the exact tile geometry around that elevator, and I didn't want to guess-fix a wall-jump/air-jump interaction (used by every enemy and boss in the game via the shared ability framework) without being sure. If you can confirm exactly where (top or bottom of the shaft, which direction you're moving) and whether it also happens faintly on the other PitchBlack elevators, that would narrow this down a lot faster than further static code reading.
+
+## New feature: debug menu save state / load state
+
+**Files:** `src/Scripts/GameManager.gd`, `src/HUD/Debugger.gd`, `src/HUD/DebugAndCheats.tscn`
+
+Added `save_state` / `load_state` buttons to the debug menu (only visible with `GameManager.debug_enabled` or when running from the editor). Captures stage, exact position/direction/velocity, health, current weapon + all weapons' ammo, collectibles, all `GlobalVariables` (subtank charges, unlocks, story flags), and the boss RNG seed into a single in-memory slot; loading restores all of it by reloading the stage and repositioning via a synthetic checkpoint.
+
+Two bugs found and fixed after initial testing:
+- **Loading right after passing through a door left you stuck in it.** The synthetic checkpoint didn't reference any door, so on reload the door reset to closed while the saved position was already on the other side of it. Fixed by carrying forward the `last_door` of whatever real checkpoint was active at save time, so that door still gets marked as already-passed on load.
+- **Loading during a boss fight sent you back to the start of the stage.** `GameManager.start_level()` calls `clear_checkpoint()` as its very first action. The synthetic checkpoint was being assigned *before* calling `start_level()`/`restart_level()`, so it got wiped out immediately whenever the load needed to go through `start_level()` (this happens whenever the saved stage doesn't match the current one at load time — which a boss encounter can trigger). Fixed by assigning the checkpoint *after* triggering the reload instead of before.
+
+This is a debug-only tool, not something that ships active in a real playthrough, so it doesn't need the same speedrun-timing scrutiny as the other items above — noted here for completeness and in case it's ever adapted into something player-facing.
