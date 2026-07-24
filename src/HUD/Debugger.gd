@@ -260,6 +260,37 @@ func _on_unlock_weapons_pressed() -> void :
 	GameManager.restart_level()
 	pass
 
+func toggle_weapon(collectible_name: String) -> void :
+	if GameManager.is_collectible_in_savedata(collectible_name):
+		GameManager.remove_collectible_from_savedata(collectible_name)
+	else:
+		GameManager.add_collectible_to_savedata(collectible_name)
+	GameManager.restart_level()
+
+func _on_toggle_yeti_weapon_pressed() -> void :
+	toggle_weapon("yeti_weapon")
+
+func _on_toggle_rooster_weapon_pressed() -> void :
+	toggle_weapon("rooster_weapon")
+
+func _on_toggle_mantis_weapon_pressed() -> void :
+	toggle_weapon("mantis_weapon")
+
+func _on_toggle_sunflower_weapon_pressed() -> void :
+	toggle_weapon("sunflower_weapon")
+
+func _on_toggle_trilobyte_weapon_pressed() -> void :
+	toggle_weapon("trilobyte_weapon")
+
+func _on_toggle_panda_weapon_pressed() -> void :
+	toggle_weapon("panda_weapon")
+
+func _on_toggle_manowar_weapon_pressed() -> void :
+	toggle_weapon("manowar_weapon")
+
+func _on_toggle_antonion_weapon_pressed() -> void :
+	toggle_weapon("antonion_weapon")
+
 
 func _on_spawn_ridearm_pressed() -> void :
 	var instance = ridearmor.instance()
