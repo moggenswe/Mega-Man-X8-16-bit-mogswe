@@ -50,3 +50,11 @@ Two bugs found and fixed after initial testing:
 Restoration branches on which child node exists (`Riden` vs `Ride`) to call the correct one. Verified end-to-end: mounted a Ride Armor, saved (capturing its scene path and health), unmounted and moved away, loaded, and confirmed the player was remounted on a fresh instance with the exact saved health.
 
 This is a debug-only tool, not something that ships active in a real playthrough, so it doesn't need the same speedrun-timing scrutiny as the other items above — noted here for completeness and in case it's ever adapted into something player-facing.
+
+## New feature: per-weapon toggle buttons in the debug menu
+
+**Files:** `src/HUD/Debugger.gd`, `src/HUD/DebugAndCheats.tscn`
+
+The debug menu already had an `unlock_weapons` button that adds all 8 boss weapons at once. Added 8 individual `toggle: <boss>` buttons (Yeti, Rooster, Mantis, Sunflower, Trilobyte, Panda, Manowar, Antonion) that each add the weapon's collectible if not owned, or remove it if already owned, then restart the level to apply — same idea as the existing armor-part buttons, but toggling both directions on one button instead of add-only. The original `unlock_weapons` button is unchanged.
+
+Verified: toggling a weapon on correctly activates it (appears in `Shot.weapons` with `active == true`) and adds its collectible to save data; toggling the same button again correctly deactivates it and removes the collectible. Debug-only, no speedrun-timing relevance.
