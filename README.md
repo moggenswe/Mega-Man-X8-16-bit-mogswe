@@ -6,6 +6,10 @@ This project is a fork of the original [Mega Man X8 16-bit](https://github.com/T
 
 **If you are using this for competitive speedrunning: read [CHANGELOG.md](CHANGELOG.md) first.** It documents, in full, every change made relative to the original recovered/decompiled game, specifically so the community can verify that nothing affecting run timing, routing, or gameplay behavior was altered beyond restoring already-broken/non-functional code to its clearly-intended behavior.
 
+## Prebuilt binary
+
+A ready-to-run Windows build is in [`builds/`](builds/) (currently v11). This file is stored via **Git LFS** — if you `git clone` without Git LFS installed, you'll get a small pointer file instead of the actual `.exe`. Install [Git LFS](https://git-lfs.com/) first, or download the file directly from GitHub's web UI (which resolves LFS files transparently). See "Building" below if you'd rather build it yourself from source.
+
 ## About
 
 Mega Man X8 16-bit is a reimagining of the PS2 original with SNES styled graphics. The aim was to demake X8 in a similar feel to the first three Mega Man X games, while trying to actually finish a low-scope fangame. This fangame is fully playable from start to finish with X and runs on Godot Engine 3.5.
