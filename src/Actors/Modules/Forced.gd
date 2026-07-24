@@ -24,3 +24,19 @@ func _EndCondition() -> bool:
 
 func is_high_priority() -> bool:
 	return true
+
+func StopAnyConflictingMoves():
+	if conflicts_with_nothing():
+		return
+	var moves_to_end = []
+	for executing_move in character.executing_moves:
+		if executing_move.name == "Charge":
+			continue
+		if is_high_priority():
+			if not executing_move.conflicts_with_nothing():
+				moves_to_end.append(executing_move)
+		if executing_move.conflicts_with_anything() or executing_move.conflicts_with(self):
+			moves_to_end.append(executing_move)
+	for move in moves_to_end:
+		Log("Interrupting " + move.name)
+		move.Interrupt(name)

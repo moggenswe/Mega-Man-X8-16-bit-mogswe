@@ -89,7 +89,7 @@ func leave(_body) -> void :
 		target_list.erase(_body)
 
 func projectile_setup(_d, _f):
-	pass
+	initialize(_d)
 
 var collider_distance: = 0.0
 func set_direction(new_direction):
