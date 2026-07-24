@@ -609,6 +609,7 @@ func save_debug_state() -> void :
 		"collectibles": collectibles.duplicate(),
 		"global_variables": GlobalVariables.variables.duplicate(true),
 		"rng_seed": BossRNG.seed_rng,
+		"last_door": checkpoint.last_door if checkpoint else NodePath(),
 	}
 	print("GameManager: Debug save state captured at " + current_level + " " + str(player.global_position))
 
@@ -620,15 +621,20 @@ func load_debug_state() -> void :
 	GlobalVariables.load_variables(state["global_variables"])
 	collectibles = state["collectibles"].duplicate()
 	BossRNG.set_seed(state["rng_seed"])
-	var debug_checkpoint = CheckpointSettings.new()
-	debug_checkpoint.id = - 1
-	debug_checkpoint.respawn_position = state["position"]
-	debug_checkpoint.character_direction = state["direction"]
-	checkpoint = debug_checkpoint
 	if current_level == state["stage"]:
 		restart_level()
 	else:
 		start_level(state["stage"])
+	# start_level() calls clear_checkpoint() internally, so the debug
+	# checkpoint must be assigned after triggering the reload/load, not
+	# before - otherwise it gets wiped and the player ends up at the
+	# stage's default spawn instead of the saved position.
+	var debug_checkpoint = CheckpointSettings.new()
+	debug_checkpoint.id = - 1
+	debug_checkpoint.respawn_position = state["position"]
+	debug_checkpoint.character_direction = state["direction"]
+	debug_checkpoint.last_door = state["last_door"]
+	checkpoint = debug_checkpoint
 	Tools.timer_p(0.05, "_finish_loading_debug_state", self, state)
 
 func _finish_loading_debug_state(state) -> void :
