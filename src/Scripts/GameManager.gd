@@ -586,3 +586,63 @@ func finish_weapon_get() -> void :
 
 func has_beaten_the_game() -> bool:
 	return GlobalVariables.get("seraph_lumine_defeated")
+
+var debug_save_state: Dictionary = {}
+
+func save_debug_state() -> void :
+	if not player:
+		print_debug("GameManager: Can't save debug state, no player.")
+		return
+	var shot = player.get_node("Shot")
+	var weapon_ammo = {}
+	for weapon in shot.weapons:
+		weapon_ammo[weapon.name] = weapon.current_ammo
+	debug_save_state = {
+		"stage": current_level,
+		"position": player.global_position,
+		"direction": player.get_facing_direction(),
+		"velocity": player.velocity,
+		"health": player.current_health,
+		"max_health": player.max_health,
+		"current_weapon_name": shot.current_weapon.name if shot.current_weapon else "",
+		"weapon_ammo": weapon_ammo,
+		"collectibles": collectibles.duplicate(),
+		"global_variables": GlobalVariables.variables.duplicate(true),
+		"rng_seed": BossRNG.seed_rng,
+	}
+	print("GameManager: Debug save state captured at " + current_level + " " + str(player.global_position))
+
+func load_debug_state() -> void :
+	if debug_save_state.empty():
+		print("GameManager: No debug save state to load.")
+		return
+	var state = debug_save_state
+	GlobalVariables.load_variables(state["global_variables"])
+	collectibles = state["collectibles"].duplicate()
+	BossRNG.set_seed(state["rng_seed"])
+	var debug_checkpoint = CheckpointSettings.new()
+	debug_checkpoint.id = - 1
+	debug_checkpoint.respawn_position = state["position"]
+	debug_checkpoint.character_direction = state["direction"]
+	checkpoint = debug_checkpoint
+	if current_level == state["stage"]:
+		restart_level()
+	else:
+		start_level(state["stage"])
+	Tools.timer_p(0.05, "_finish_loading_debug_state", self, state)
+
+func _finish_loading_debug_state(state) -> void :
+	if not player:
+		return
+	player.max_health = state["max_health"]
+	player.current_health = state["health"]
+	player.velocity = state["velocity"]
+	var shot = player.get_node("Shot")
+	for weapon in shot.weapons:
+		if state["weapon_ammo"].has(weapon.name):
+			weapon.current_ammo = state["weapon_ammo"][weapon.name]
+	for weapon in shot.weapons:
+		if weapon.name == state["current_weapon_name"]:
+			shot.set_current_weapon(weapon)
+			break
+	print("GameManager: Debug save state loaded.")

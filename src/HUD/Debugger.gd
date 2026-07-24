@@ -463,3 +463,11 @@ func _on_revive_vile_ant_pressed():
 
 func _on_revive_vile_panda_pressed():
 	GlobalVariables.erase("defeated_panda_vile")
+
+
+func _on_save_state_pressed() -> void :
+	GameManager.save_debug_state()
+
+
+func _on_load_state_pressed() -> void :
+	GameManager.load_debug_state()

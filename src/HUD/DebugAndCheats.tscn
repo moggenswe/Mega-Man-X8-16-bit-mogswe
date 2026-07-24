@@ -315,6 +315,22 @@ margin_bottom = 402.0
 text = "set_seed"
 align = 1
 
+[node name="save_state" type="Button" parent="vBoxContainer/hBoxContainer/vBoxContainer"]
+margin_top = 403.0
+margin_right = 124.0
+margin_bottom = 423.0
+action_mode = 0
+text = "save_state"
+clip_text = true
+
+[node name="load_state" type="Button" parent="vBoxContainer/hBoxContainer/vBoxContainer"]
+margin_top = 424.0
+margin_right = 124.0
+margin_bottom = 444.0
+action_mode = 0
+text = "load_state"
+clip_text = true
+
 [node name="vBoxContainer2" type="VBoxContainer" parent="vBoxContainer/hBoxContainer"]
 margin_left = 124.0
 margin_right = 240.0
@@ -570,3 +586,5 @@ text = "manow_crystal"
 [connection signal="pressed" from="vBoxContainer/hBoxContainer/vBoxContainer2/gateway" to="." method="_on_gateway_pressed"]
 [connection signal="pressed" from="vBoxContainer/hBoxContainer/vBoxContainer2/gateway_final" to="." method="_on_gateway_final_pressed"]
 [connection signal="pressed" from="vBoxContainer/hBoxContainer/vBoxContainer2/manow_crystal" to="." method="_on_manow_crystal_pressed"]
+[connection signal="pressed" from="vBoxContainer/hBoxContainer/vBoxContainer/save_state" to="." method="_on_save_state_pressed"]
+[connection signal="pressed" from="vBoxContainer/hBoxContainer/vBoxContainer/load_state" to="." method="_on_load_state_pressed"]
