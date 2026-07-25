@@ -668,6 +668,24 @@ func mount_player_on_ride(scene_path: String, ride_health: float) -> void :
 		return
 	var ride_instance = ride_scene.instance()
 	get_tree().current_scene.add_child(ride_instance, true)
+	ride_instance.current_health = ride_health
+	var bike_mount = ride_instance.get_node_or_null("Riden")
+	if bike_mount:
+		# Bike (BikeRiden.gd extends src/Actors/Props/Ride.gd): forcing
+		# make_rider() directly hits the exact same race as the Ride Armor
+		# case below - the player isn't grounded yet right after a
+		# checkpoint/save-state teleport, so their own Fall/Jump ability can
+		# evict the freshly-started ride the very next physics frame, and
+		# nothing re-enables their collision afterward. Bike.gd's own
+		# `Ride.gd` already has a working organic mount trigger
+		# (`_on_area2D_body_entered` -> `is_able_to_ride` -> `make_rider`),
+		# the same one Debugger.gd's own `_on_spawn_bike_pressed()` debug
+		# button relies on (it just spawns the bike at the player's
+		# position with no forced mount) - so do the same here instead of
+		# forcing it.
+		ride_instance.global_position = player.global_position
+		print("GameManager: Bike restored (unmounted) at " + str(ride_instance.global_position) + " - walk into it to remount.")
+		return
 	# Matches Debugger.gd's _on_spawn_ridearm_pressed()/_on_spawn_gridearm_pressed()
 	# debug spawn (the -16 y offset there is a proven-working spawn position,
 	# not an arbitrary one - mirror it rather than spawning exactly on top
@@ -675,13 +693,6 @@ func mount_player_on_ride(scene_path: String, ride_health: float) -> void :
 	var ride_spawn_position = player.global_position
 	ride_spawn_position.y -= 16
 	ride_instance.global_position = ride_spawn_position
-	ride_instance.current_health = ride_health
-	var bike_mount = ride_instance.get_node_or_null("Riden")
-	if bike_mount:
-		# Bike (BikeRiden.gd extends src/Actors/Props/Ride.gd): make_rider()
-		# takes the collision body directly.
-		bike_mount.make_rider(player.get_node("Enemy Collision Detector"))
-		return
 	var armor_mount = ride_instance.get_node_or_null("Ride")
 	if armor_mount:
 		# Directly forcing Ride Armor's NewAbility-based mount (rider= then
