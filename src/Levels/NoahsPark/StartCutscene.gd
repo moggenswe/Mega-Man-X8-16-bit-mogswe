@@ -14,6 +14,16 @@ func start():
 		start_gameplay()
 
 func start_gameplay():
+	if not GameManager.player:
+		# On a same-stage reload (e.g. loading a debug save state taken
+		# during/before this cutscene), this node's own _ready() timer can
+		# fire again before GameManager.player has been reassigned by the
+		# freshly-recreated player scene. Wait rather than crash - this
+		# would otherwise abort here and skip emitting "gameplay_start"
+		# for every listener (recording/ghost playback) for the rest of
+		# the level.
+		Tools.timer(0.1, "start_gameplay", self)
+		return
 	started = true
 	print("Starting Gameplay.........................")
 	GameManager.player.activate()

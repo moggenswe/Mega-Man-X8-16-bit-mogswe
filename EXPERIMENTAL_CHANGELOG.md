@@ -54,6 +54,15 @@ Restoration branches on which child node exists (`Riden` vs `Ride`) to call the 
 
 This is a debug-only tool, not something that ships active in a real playthrough, so it doesn't need the same speedrun-timing scrutiny as the other items above — noted here for completeness and in case it's ever adapted into something player-facing.
 
+### 4. Loading a state saved during/before NoahsPark's opening cutscene crashed `start_gameplay()`
+**File:** `src/Levels/NoahsPark/StartCutscene.gd`
+
+**Root cause:** this node's `_ready()` schedules a fixed 3-second timer before calling `start_gameplay()`, which does `GameManager.player.activate()`. On a same-stage reload (`restart_level()` → `get_tree().reload_current_scene()`), this node gets recreated and reschedules its own 3-second timer — but the freshly-recreated player scene hadn't necessarily reassigned `GameManager.player` yet by the time it fired, causing `SCRIPT ERROR: Invalid call. Nonexistent function 'activate' in base 'Nil'.` and aborting the function immediately, before `Event.emit_signal("gameplay_start")` (used by ghost recording/playback) or `player.reactivate_charge()` ever ran. Reported alongside "loading a state despawned all the enemies" when saving/loading very early in the stage; confirmed the crash itself with a scripted reload reproduction, though I could not confirm enemies were actually affected by this specific crash in my own testing (enemy count and positions were unaffected both with and without the fix in my repro) — flagging that distinction rather than claiming this fully explains the enemy report.
+
+**Fix:** `start_gameplay()` now waits and retries (0.1s) instead of crashing if `GameManager.player` isn't set yet.
+
+**Also investigated, not fixed:** a generic engine error, `ERROR: Timer was not added to the SceneTree. Either add it or set autostart to true.`, appears after reloads. Confirmed via a plain `restart_level()` call with no save-state code involved at all that this is a **pre-existing, general reload issue**, not something introduced by the save-state feature — it would equally affect a normal death/respawn restart. Didn't track down the specific timer/node responsible; didn't find it to correlate with any enemy behavior change in testing.
+
 ## New feature: per-weapon toggle buttons in the debug menu
 
 **Files:** `src/HUD/Debugger.gd`, `src/HUD/DebugAndCheats.tscn`
