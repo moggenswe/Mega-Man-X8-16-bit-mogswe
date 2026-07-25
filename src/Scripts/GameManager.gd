@@ -64,7 +64,6 @@ func _ready() -> void :
 	Savefile.load_save()
 	on_level_start()
 
-
 func start_dialog(dialog_tree) -> void :
 	dialog_box.startup(dialog_tree)
 
@@ -669,7 +668,13 @@ func mount_player_on_ride(scene_path: String, ride_health: float) -> void :
 		return
 	var ride_instance = ride_scene.instance()
 	get_tree().current_scene.add_child(ride_instance, true)
-	ride_instance.global_position = player.global_position
+	# Matches Debugger.gd's _on_spawn_ridearm_pressed()/_on_spawn_gridearm_pressed()
+	# debug spawn (the -16 y offset there is a proven-working spawn position,
+	# not an arbitrary one - mirror it rather than spawning exactly on top
+	# of the player).
+	var ride_spawn_position = player.global_position
+	ride_spawn_position.y -= 16
+	ride_instance.global_position = ride_spawn_position
 	ride_instance.current_health = ride_health
 	var bike_mount = ride_instance.get_node_or_null("Riden")
 	if bike_mount:
@@ -679,11 +684,19 @@ func mount_player_on_ride(scene_path: String, ride_health: float) -> void :
 		return
 	var armor_mount = ride_instance.get_node_or_null("Ride")
 	if armor_mount:
-		# Ride Armor (src/Actors/Props/RideArmor/Ride.gd, NewAbility-based):
-		# make_rider() takes no arguments, "rider" must be set first and
-		# execution triggered manually via _on_signal().
-		armor_mount.rider = player
-		armor_mount.recent_rider = player
-		armor_mount._on_signal()
+		# Directly forcing Ride Armor's NewAbility-based mount (rider= then
+		# _on_signal()) races the player's own Fall/Jump ability: right
+		# after a checkpoint/save-state teleport the player hasn't had a
+		# physics step to settle onto solid ground yet, so Fall/Jump can
+		# win a same-frame priority conflict and evict the freshly-started
+		# Ride ability, leaving the player stuck collision-disabled with
+		# nothing to re-enable it (organic mounting never hits this since
+		# the player is normally already grounded when they walk up to a
+		# Ride Armor). Rather than fight that race, just leave the Ride
+		# Armor unmounted next to the player and let its own
+		# `_on_body_enter` Area2D trigger the mount the normal way, the
+		# instant the player is next actually standing on the ground -
+		# exactly like walking up to any other Ride Armor.
+		print("GameManager: Ride Armor restored (unmounted) at " + str(ride_instance.global_position) + " - walk into it to remount.")
 		return
 	print_debug("GameManager: Saved ride scene has no Ride/Riden node: " + scene_path)
