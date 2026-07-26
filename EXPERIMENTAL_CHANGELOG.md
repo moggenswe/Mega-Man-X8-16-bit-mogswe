@@ -22,6 +22,15 @@ This branch (`experimental`) contains fixes that **may affect gameplay/movement 
 
 **What could change for a run:** Icarus's max-charge shot now actually deals damage and consumes its normal travel/lifetime behavior, where before it was inert. If any route currently exploits "Icarus max-charge shot does nothing" (e.g., as a no-op button press for some timing reason), that exploit is gone — but a shot that does nothing at all seems extremely unlikely to be an intentional route element.
 
+### 2b. Regression from fix #2: Icarus's max-charge shot appeared ~48px ahead of where it actually hit
+**File:** `src/Actors/Player/BossWeapons/SqueezeBomb/SqueezeBomb.gd`
+
+**Root cause:** Fix #2 above made `projectile_setup()` call `initialize(direction)` synchronously (from `Weapon.position_shot()`, right after the shot is added to the scene tree). But `Buster.connect_charged_shot_event()` *also* calls `initialize(direction)` on the same shot — deferred, since it just checks `has_method("initialize")` and `SqueezeBomb.gd` has one. That means `initialize()` — and therefore `_Setup()`, which shifts `global_position.x` by `foward_start` (48.0 for the Laser Buster) in the facing direction — ran twice per shot. The beam ended up displaced an extra 48px forward of its intended position, so it looked like it passed straight through a boss instead of hitting it (the hitbox had moved with it, out of range). Only the level-3/Icarus charged shot was affected, since charge levels 1 and 2 use their own separate, unshared scripts (`Medium Buster.gd` / `Charged Buster.gd`) that don't have this dual call-site. The plain SqueezeBomb boss weapon itself is unaffected — it only ever reaches `initialize()` once, via `BossWeapon.instantiate_projectile()`, never through `projectile_setup()`.
+
+**Fix:** Added an `initialize()` override in `SqueezeBomb.gd` that returns immediately if the projectile is already `active` (set by the first `initialize()` call), so a second call from either call site is a no-op.
+
+**What could change for a run:** none expected — this restores the pre-fix-#2 hit behavior (correct position, correct single sound/flash/activation) rather than changing anything new.
+
 ## Investigated, not fixed — needs more information
 
 ### 3. PitchBlack, last moving elevator: jumping off it only allows a single jump, not the Icarus double-jump
@@ -70,3 +79,13 @@ This is a debug-only tool, not something that ships active in a real playthrough
 The debug menu already had an `unlock_weapons` button that adds all 8 boss weapons at once. Added 8 individual `toggle: <boss>` buttons (Yeti, Rooster, Mantis, Sunflower, Trilobyte, Panda, Manowar, Antonion) that each add the weapon's collectible if not owned, or remove it if already owned, then restart the level to apply — same idea as the existing armor-part buttons, but toggling both directions on one button instead of add-only. The original `unlock_weapons` button is unchanged.
 
 Verified: toggling a weapon on correctly activates it (appears in `Shot.weapons` with `active == true`) and adds its collectible to save data; toggling the same button again correctly deactivates it and removes the collectible. Debug-only, no speedrun-timing relevance.
+
+## New feature: boss fight kill-time / DPS / per-weapon damage tracker
+
+**Files:** `src/Scripts/GameManager.gd`, `src/Actors/Modules/Enemy/BossDamage.gd`, `src/Levels/HUD.gd`, `src/HUD/Hud.tscn`
+
+Added a debug HUD panel ("Boss Fight Info") for speedrun-planning: starts a timer the first frame a boss becomes hittable (`BossDamage.activate_get_hit()`, hooked into the existing `intro_concluded` signal), logs every hit by weapon name (`BossDamage.reduce_health()`), and stops the timer the instant the boss's health reaches 0 (`BossDamage.apply_invulnerability_or_death()` — the kill moment itself, not the death animation finishing). Displays kill time, DPS, and a per-weapon damage breakdown, positioned below "X Debug Info" (repositioned once after initial placement was partly off-screen).
+
+Discovered and fixed a real, unrelated regression while first testing this feature: see #2b above (Icarus max-charge shot position offset) — confirmed via a temporary disable/re-enable of this feature's 3 `BossDamage.gd` hook lines that they were not the cause.
+
+**Iterated on visibility after first live test:** showing the panel throughout the whole fight (tied to the general debug-info toggle) covered too much of the actual gameplay. Changed so the panel stays hidden during the fight and only appears at the kill moment (`GameManager.debug_boss_fight_show_result`, set `true` in `debug_boss_fight_end()`), then stays visible through the rest of the stage (death animation, weapon-get, etc.) until `GameManager.go_to_stage_select()` calls the new `debug_boss_fight_reset()`, which clears it and the rest of the tracker state for the next fight. Verified working end-to-end via live test. Debug-only, no speedrun-timing relevance for a real run.
