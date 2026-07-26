@@ -91,6 +91,21 @@ func leave(_body) -> void :
 func projectile_setup(_d, _f):
 	initialize(_d)
 
+func initialize(direction) -> void :
+	# Icarus's max-charge shot (Laser Buster, which reuses this script) fires
+	# via Weapon.position_shot() -> projectile_setup() -> initialize() above,
+	# synchronously, right after being added to the tree. But Buster.gd's
+	# connect_charged_shot_event() *also* calls initialize() a second time,
+	# deferred, since it just checks has_method("initialize"). Without this
+	# guard, _Setup() (which shifts global_position.x by foward_start) runs
+	# twice, pushing the beam an extra foward_start pixels ahead of where it
+	# should be - it doesn't register hits because the hitbox has moved with
+	# it. The plain BossWeapon-fired SqueezeBomb only ever calls initialize()
+	# once, so this guard is a no-op for it.
+	if active:
+		return
+	.initialize(direction)
+
 var collider_distance: = 0.0
 func set_direction(new_direction):
 	Log("Seting direction: " + str(new_direction))
