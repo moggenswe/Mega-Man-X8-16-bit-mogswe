@@ -82,6 +82,17 @@ mouse_filter = 2
 custom_fonts/normal_font = ExtResource( 8 )
 text = "Input Info"
 
+[node name="Boss Fight Info" type="RichTextLabel" parent="."]
+visible = false
+self_modulate = Color( 1, 1, 1, 0.780392 )
+margin_left = 2.0
+margin_top = 110.0
+margin_right = 258.0
+margin_bottom = 220.0
+mouse_filter = 2
+custom_fonts/normal_font = ExtResource( 8 )
+text = "Boss Fight"
+
 [node name="textureRect" type="TextureRect" parent="."]
 visible = false
 margin_right = 40.0

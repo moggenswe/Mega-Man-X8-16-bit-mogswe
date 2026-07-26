@@ -57,6 +57,66 @@ var last_player_position: = Vector2.ZERO
 
 var lumine_boss_order: Array
 
+# --- Debug: boss fight kill-time / DPS / per-weapon damage tracker ---
+# Started from BossDamage.activate_get_hit() (first frame the boss can be
+# hit), logged from BossDamage.reduce_health() (every hit, by weapon name),
+# stopped from BossDamage.apply_invulnerability_or_death() (the instant
+# health hits 0 - the actual kill, not the death animation finishing).
+var debug_boss_fight_active: = false
+var debug_boss_fight_start_msec: = 0.0
+var debug_boss_fight_end_msec: = 0.0
+var debug_boss_damage_log: Dictionary = {}
+# The HUD only displays the fight info from the kill moment onward (showing
+# it live covered too much of the gameplay) - this flag is what it watches to
+# know when to start, and it's cleared again once stage select is reached.
+var debug_boss_fight_show_result: = false
+
+func debug_boss_fight_start(_boss_name: String = "") -> void :
+	debug_boss_fight_active = true
+	debug_boss_fight_start_msec = OS.get_ticks_msec()
+	debug_boss_fight_end_msec = 0.0
+	debug_boss_damage_log = {}
+	debug_boss_fight_show_result = false
+
+func debug_boss_fight_log_hit(amount: float, weapon_name: String) -> void :
+	if not debug_boss_fight_active:
+		return
+	if not debug_boss_damage_log.has(weapon_name):
+		debug_boss_damage_log[weapon_name] = 0.0
+	debug_boss_damage_log[weapon_name] += amount
+
+func debug_boss_fight_end() -> void :
+	if not debug_boss_fight_active:
+		return
+	debug_boss_fight_active = false
+	debug_boss_fight_end_msec = OS.get_ticks_msec()
+	debug_boss_fight_show_result = true
+
+func debug_boss_fight_reset() -> void :
+	debug_boss_fight_active = false
+	debug_boss_fight_start_msec = 0.0
+	debug_boss_fight_end_msec = 0.0
+	debug_boss_damage_log = {}
+	debug_boss_fight_show_result = false
+
+func debug_boss_fight_kill_time() -> float:
+	if debug_boss_fight_start_msec <= 0.0:
+		return 0.0
+	var end_msec = debug_boss_fight_end_msec if debug_boss_fight_end_msec > 0.0 else OS.get_ticks_msec()
+	return (end_msec - debug_boss_fight_start_msec) / 1000.0
+
+func debug_boss_fight_total_damage() -> float:
+	var total: = 0.0
+	for weapon_name in debug_boss_damage_log:
+		total += debug_boss_damage_log[weapon_name]
+	return total
+
+func debug_boss_fight_dps() -> float:
+	var elapsed = debug_boss_fight_kill_time()
+	if elapsed <= 0.0:
+		return 0.0
+	return debug_boss_fight_total_damage() / elapsed
+
 func _ready() -> void :
 	print("GameManager: Initializing...")
 	set_pause_mode(2)
@@ -234,6 +294,7 @@ func handle_player_death() -> void :
 
 func go_to_stage_select() -> void :
 	print_debug(":::::::: going to stage select")
+	debug_boss_fight_reset()
 	var _dv = get_tree().change_scene("res://src/StageSelect/StageSelectScreen.tscn")
 
 func go_to_weapon_get() -> void :

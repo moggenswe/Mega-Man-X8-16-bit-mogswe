@@ -20,6 +20,7 @@ onready var ride_hp: TextureProgress = $"Ride Bar/textureProgress"
 
 
 onready var rec_info: RichTextLabel = $"Rec Info"
+onready var boss_fight_info: RichTextLabel = $"Boss Fight Info"
 
 onready var black_screen = $BlackScreen
 onready var white_screen = $WhiteScreen
@@ -41,6 +42,7 @@ var chronotimer: = 0.0
 var last_message
 
 var ride_hp_tween: SceneTreeTween
+var debug_mode_on: = false
 
 func show_rng():
 	rec_info.text = "BossRNG: " + str(BossRNG.seed_rng)
@@ -86,6 +88,14 @@ func show_debug(show = true) -> void :
 	b_info.visible = show
 	rec_info.visible = show
 	chronometer.visible = show
+	debug_mode_on = show
+	update_boss_fight_info_visibility()
+
+func update_boss_fight_info_visibility() -> void :
+	# Only shown from the kill moment onward (GameManager.debug_boss_fight_show_result),
+	# not during the fight itself - showing it live covered too much of the gameplay.
+	# Stays up until GameManager.debug_boss_fight_reset() clears it on reaching stage select.
+	boss_fight_info.visible = debug_mode_on and GameManager.debug_boss_fight_show_result
 
 
 func stop_chronometer() -> void :
@@ -116,7 +126,9 @@ func tween_focus_on_bar(focus_bar, other_bar, x_pos, color) -> void :
 
 func setup_boss_health(_boss):
 	boss = _boss
-	boss.get_node("Damage").connect("took_damage", boss_bar, "blink")
+	var boss_damage = boss.get_node("Damage")
+	if not boss_damage.is_connected("took_damage", boss_bar, "blink"):
+		boss_damage.connect("took_damage", boss_bar, "blink")
 
 func show_debug_text() -> void :
 	if is_instance_valid(debugging_character):
@@ -156,12 +168,27 @@ func _process(delta: float) -> void :
 	i_info.text = "Inputs:" + show_input_info()
 	b_info.text = "FPS: " + str(Engine.get_frames_per_second())
 	b_info.text += "\n" + show_boss_health_and_weapon(delta)
-	
+	update_boss_fight_info_visibility()
+	if boss_fight_info.visible:
+		boss_fight_info.text = show_boss_fight_info()
+
 	timer += delta
 	if chronometering:
 		chronotimer += delta
 		chronometer.text = Tools.get_readable_time(chronotimer)
 	show_debug_text()
+
+func show_boss_fight_info() -> String:
+	if GameManager.debug_boss_fight_start_msec <= 0.0:
+		return "Boss Fight\n(no boss engaged yet)"
+	var text: = "Boss Fight\n"
+	text += "Kill Time: " + Tools.get_readable_time(GameManager.debug_boss_fight_kill_time()) + "\n"
+	text += "DPS: " + str(round(GameManager.debug_boss_fight_dps() * 10) / 10.0) + "\n"
+	text += "\nDamage per weapon:\n"
+	for weapon_name in GameManager.debug_boss_damage_log:
+		var dmg = GameManager.debug_boss_damage_log[weapon_name]
+		text += weapon_name + ": " + str(round(dmg * 10) / 10.0) + " hp\n"
+	return text
 
 func process_player_bar_size():
 	if is_instance_valid(GameManager.player):
