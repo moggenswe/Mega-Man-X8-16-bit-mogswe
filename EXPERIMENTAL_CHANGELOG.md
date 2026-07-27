@@ -4,6 +4,22 @@ This branch (`experimental`) contains fixes that **may affect gameplay/movement 
 
 ## Fixed
 
+### 7. Ported main's "decompiler/porting gaps" fixes (main commit `0e67423`), missing from experimental until now
+`experimental` had diverged from `main` before this commit landed there, so a full playthrough on `experimental` was still hitting several bugs `main` had already fixed. Ported the same changes here:
+
+- **`TweenController.gd`/`Tools.gd`: the systemic tween int/float fix was incomplete.** `attribute()`/`add_attribute()` (property tweens) were already fixed earlier to coerce int/float mismatches via `match_property_type()`, but `method()`/`add_method()`/`Tools.tween_method()` (method tweens) never got the equivalent treatment. Added `match_value_types()` (coerces the int side to float when the tween's start/end values don't match — SceneTreeTween's method tweener requires them to be the exact same type) and wired it into all three. This affects roughly 80 call sites project-wide, including Ride Armor Eject/Fall/Idle/Punch's horizontal-speed deceleration, DevilBear's Jump Stomp, Vile's Air Dash, and several of Lumine's copied desperation attacks — anywhere a tween's start value was an int and its end value a float (or vice versa), the interpolation was silently no-opping (frozen at the starting value for the whole tween duration, same failure mode as the property-tween bugs already documented above).
+- **`BambooSlash.gd`**: was the only one of Lumine's 8 copied desperation attacks missing the `ready_for_stun` signal entirely, so landing a stun-worthy hit during Lumine's Panda-phase desperation attack could never actually interrupt it.
+- **`Lumine.tscn`**: added a missing `flash` child node under the GigaStorm (Manowar-phase) copy, so its lightning-strike screen flash actually plays. Also very likely the underlying cause of a separate-looking `Attempt to connect nonexistent signal 'ready_for_stun'` error seen on this same node — the missing child threw mid-onready-setup, which plausibly disrupted the rest of that node's initialization before a sibling script's `_ready()` tried to connect to it. No separate fix needed for that one; restoring the node should resolve both.
+- **`Vile.tscn`**: removed the dead, non-functional `VileAchievementUnlocker` node (see earlier finding above about the correctly-wired copies elsewhere already covering this achievement).
+- **`TurretDeath.gd`**: removed a connect call to a nonexistent (decompiler-mangled) method name, thrown every time any turret-type enemy readied.
+- **`MetalValley/rising_platform.gd`**: restored a missing `0.7` argument to a `screenshake` signal emission (every other call site in the codebase passes this for the same "elevator reached top" moment) — the screenshake simply never fired for this specific elevator.
+
+All of the above are pure bug fixes carried over from an already-reviewed `main` commit — see `CHANGELOG.md` for the original reasoning/verification notes on each. Verified the port didn't introduce any parse/load errors (force-loaded `Lumine.tscn` directly, no `GigaStorm`/`flash`/`ready_for_stun` errors, clean build).
+
+### 8. Duplicate `animation_finished` connection spam on repeated door transitions
+**File:** `src/Actors/NewStateMachine/AnimationController.gd`
+
+`on_finish(method, object)` connected `animation_finished` to the given method/object with no guard against already being connected — same pattern as the boss health bar bug fixed earlier (#6 above), just a different, more general file shared by doors and other animated objects. Walking through the same door repeatedly (or anything else re-calling `on_finish` on an already-connected pair) threw `Signal 'animation_finished' is already connected...` every time. Added an `is_connected()` guard, matching the existing fix. No behavior change, just removes log spam.
 ### 6. Ride Armor health bar stays on screen after losing the Ride Armor (blue and green)
 **File:** `src/HUD/RidearmorBar.gd`
 
