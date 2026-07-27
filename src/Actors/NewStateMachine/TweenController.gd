@@ -33,7 +33,8 @@ func attribute(attribute: String, final_value = 1.0, duration: = 0.25, object = 
 func method(method: String, initial_value: = 0.0, final_value: = 1.0, duration: = 0.25, object = owner) -> void :
 	var tween: = owner.create_tween()
 
-	tween.tween_method(object, method, initial_value, final_value, duration)
+	var values = match_value_types(initial_value, final_value)
+	tween.tween_method(object, method, values[0], values[1], duration)
 	tween_list.append(tween)
 
 func callback(method: String, delay: = 1.0, object = owner, binds = []) -> void :
@@ -52,7 +53,8 @@ func add_attribute(attribute: String, final_value = 1.0, duration: = 0.25, objec
 
 func add_method(method: String, initial_value: = 0.0, final_value: = 1.0, duration: = 0.25, object = owner, binds = []) -> void :
 
-	get_last().tween_method(object, method, initial_value, final_value, duration, binds)
+	var values = match_value_types(initial_value, final_value)
+	get_last().tween_method(object, method, values[0], values[1], duration, binds)
 
 func add_wait(wait_duration: = 0.25) -> void :
 
@@ -115,3 +117,15 @@ static func match_property_type(object, attribute: String, final_value):
 	elif typeof(current_value) == TYPE_INT and typeof(final_value) == TYPE_REAL:
 		return int(round(final_value))
 	return final_value
+
+# SceneTreeTween's MethodTweener requires initial_value and final_value to be
+# the exact same Variant type as each other (there's no target property to
+# check against, unlike match_property_type above). Coerces the int side to
+# float when they differ - float is what every caller in this codebase means
+# (speed/position/alpha/etc.), never the reverse, so this never truncates.
+static func match_value_types(initial_value, final_value) -> Array:
+	if typeof(initial_value) == TYPE_INT and typeof(final_value) == TYPE_REAL:
+		return [float(initial_value), final_value]
+	elif typeof(initial_value) == TYPE_REAL and typeof(final_value) == TYPE_INT:
+		return [initial_value, float(final_value)]
+	return [initial_value, final_value]
