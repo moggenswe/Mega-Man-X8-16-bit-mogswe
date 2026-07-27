@@ -4,6 +4,19 @@ This branch (`experimental`) contains fixes that **may affect gameplay/movement 
 
 ## Fixed
 
+### 6. Ride Armor health bar stays on screen after losing the Ride Armor (blue and green)
+**File:** `src/HUD/RidearmorBar.gd`
+
+**Reported:** riding a (reportedly green, likely also blue) Ride Armor and losing it to a boss leaves its health bar meter on screen instead of the HUD switching back to showing X's own life meter as normal.
+
+**Root cause:** same decompiler-artifact bug class documented in `CHANGELOG.md` (int literal where a tween needs a float, so Godot silently no-ops that step) — just an occurrence in a file that bug hunt didn't cover, since `HUD.gd`'s own equivalent call site for the Bike (`change_camera_focus()`) already correctly used `13.0`/`-14.0`. `RidearmorBar.gd`'s `move_in()`/`move_out()` call the same shared `HUD.tween_focus_on_bar()` helper but passed plain `13`/`-14` (ints). `rect_position:x` is a float property, so the tween moving the Ride Armor's bar back to its hidden position (`-14`) silently failed every time you dismounted or lost a Ride Armor — it just stayed wherever it was showing.
+
+**Confirmed via a scripted repro** (spawn a Ride Armor, force-mount it, deal lethal damage, inspect the HUD's actual node state afterward) rather than guessing: before the fix, the bar's position stayed at its "mounted" position; after changing both literals to `13.0`/`-14.0`, it correctly returns to its hidden position.
+
+**Fix:** `13` → `13.0`, `-14` → `-14.0` in `RidearmorBar.gd`'s `move_in()`/`move_out()`.
+
+**What could change for a run:** none — this is a HUD-only visual fix (a stuck health bar icon), it doesn't touch gameplay, input, or timing. Also applied to `main` as a plain bug fix, same as the other decompiler-artifact tween fixes there.
+
 ### 5. Ride Armor: mashing punch right as Vile is defeated causes a stray extra punch later
 **File:** `src/Actors/Props/RideArmor/Punch.gd`
 
