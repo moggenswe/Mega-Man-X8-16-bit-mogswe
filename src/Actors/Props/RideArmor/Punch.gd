@@ -76,10 +76,18 @@ func _on_land() -> void :
 		EndAbility()
 
 func _Interrupt() -> void :
-	
-	pass
-	
-	
+	# If the punch button was pressed again during the current punch's
+	# animation, _on_fire() buffers it as next_punch = true so the combo
+	# continues once the animation allows it. But if something else
+	# interrupts this ability first (a cutscene starting, getting knocked
+	# back, dismounting) before that buffered punch fires, next_punch stayed
+	# true with nothing left to clear it - so the *next* time Punch legitimately
+	# starts from a fresh button press, _Update() sees next_punch already true
+	# and immediately queues a second punch nobody asked for. This is why a
+	# punch pressed right as a cutscene starts (e.g. Vile's defeat) can turn
+	# a later single press into a double punch.
+	next_punch = false
+
 
 func _on_new_direction(dir) -> void :
 	scale.x = dir
