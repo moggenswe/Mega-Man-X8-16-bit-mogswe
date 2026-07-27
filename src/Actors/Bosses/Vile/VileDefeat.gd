@@ -68,13 +68,20 @@ func _Update(delta) -> void :
 				next_attack_stage()
 				Event.emit_signal("boss_health_hide")
 				emit_signal("screen_flash")
+				# Vile teleports away instead of leading to a weapon-get/stage
+				# select screen like a Maverick kill does, so the boss fight
+				# tracker's usual "hide at stage select" never comes - reset
+				# it here instead, once he's actually gone, or the DPS panel
+				# would stay on screen for the rest of the level.
+				GameManager.debug_boss_fight_reset()
 				character.destroy()
-					
+
 		elif timer > 1.55:
 			GlobalVariables.set(defeat_flag, "defeated")
 			GameManager.end_boss_death_cutscene()
 			next_attack_stage()
 			emit_signal("screen_flash")
+			GameManager.debug_boss_fight_reset()
 			character.destroy()
 
 func _Interrupt() -> void :

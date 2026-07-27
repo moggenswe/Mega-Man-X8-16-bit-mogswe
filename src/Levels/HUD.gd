@@ -56,6 +56,15 @@ func _ready() -> void :
 	black_screen.visible = true
 	white_screen.visible = false
 	boss_hp_filled = false
+	# Every boss death washes the screen with BossDeath.gd's background_light
+	# flash (tweens to near-white) - plain white/light debug text disappears
+	# into it right when the panel matters most. Red reads on both that flash
+	# and the game's normal dark backgrounds. Guarded because reload_current_scene()
+	# has a known pre-existing flakiness around freshly-instanced child nodes
+	# (see the "Timer not added to SceneTree" issue noted elsewhere) that can
+	# occasionally leave this onready reference null after a level reload.
+	if boss_fight_info:
+		boss_fight_info.add_color_override("default_color", Color(1.0, 0.16, 0.16))
 	if show_boss_bar:
 		Event.listen("boss_health_appear", self, "setup_boss_health")
 		Event.listen("boss_health_hide", self, "hide_boss_hp")
@@ -95,7 +104,8 @@ func update_boss_fight_info_visibility() -> void :
 	# Only shown from the kill moment onward (GameManager.debug_boss_fight_show_result),
 	# not during the fight itself - showing it live covered too much of the gameplay.
 	# Stays up until GameManager.debug_boss_fight_reset() clears it on reaching stage select.
-	boss_fight_info.visible = debug_mode_on and GameManager.debug_boss_fight_show_result
+	if boss_fight_info:
+		boss_fight_info.visible = debug_mode_on and GameManager.debug_boss_fight_show_result
 
 
 func stop_chronometer() -> void :
@@ -169,7 +179,7 @@ func _process(delta: float) -> void :
 	b_info.text = "FPS: " + str(Engine.get_frames_per_second())
 	b_info.text += "\n" + show_boss_health_and_weapon(delta)
 	update_boss_fight_info_visibility()
-	if boss_fight_info.visible:
+	if boss_fight_info and boss_fight_info.visible:
 		boss_fight_info.text = show_boss_fight_info()
 
 	timer += delta
