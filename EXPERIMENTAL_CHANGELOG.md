@@ -4,6 +4,19 @@ This branch (`experimental`) contains fixes that **may affect gameplay/movement 
 
 ## Fixed
 
+### 5. Ride Armor: mashing punch right as Vile is defeated causes a stray extra punch later
+**File:** `src/Actors/Props/RideArmor/Punch.gd`
+
+**Reported:** "the cutscene interrupt at vile defeat causes whatever you do on your dpad at the last moment to get stuck in memory. for me, this was frequently an extra punch, so the next time i would attempt to punch it would be 2 punches, which consequently messes up the strat where you use a metal box as a jump point."
+
+**Root cause:** Punch is a combo of two alternating animations (`punch_1`/`punch_2`). Pressing fire again while the current punch is still playing doesn't restart the ability — `_on_fire()` just sets `next_punch = true`, and `_Update()` throws the queued punch once the current animation finishes. But `_Interrupt()` (called by `NewAbility.end()` on *any* forced termination — a cutscene starting, knockback, dismounting, not just a natural finish) was a no-op and never cleared `next_punch`. If the ability got yanked while a punch was buffered — exactly what happens if you're mashing fire the instant Vile's defeat cutscene takes over — `next_punch` stayed `true` with the ability no longer running. The next time Punch legitimately starts from a fresh press, `_Update()` sees the stale `next_punch == true` on its very first update and immediately queues a second punch nobody asked for, once the first punch's animation finishes. This isn't unique to the Vile fight specifically — any interrupt while a punch is buffered can trigger it — but Vile's defeat cutscene is a very reliable trigger since players tend to be mid-combo right at the kill.
+
+**Fix:** `_Interrupt()` now resets `next_punch = false`, mirroring the same "ability got cut off, reset its buffered state" pattern already used by `Charge.gd._Interrupt()` (`charged_time = 0`).
+
+**What could change for a run:** none expected for normal play — this removes an unintended extra hit, it doesn't add one. If any route currently relies on this glitch to get a "free" extra punch out of a buffered input (seems unlikely given it reportedly breaks the Panda box-jump strat rather than helping it), that would no longer work.
+
+**Also investigated, not fixed — unrelated to the reported bug:** while reproducing this, found `src/AchievementSystem/VileAchievementUnlocker.gd` connects to a `"defeated"` signal on `get_parent()`, but in at least one of the two Vile encounters (Panda's) its parent is the Vile character body itself, not `VileSpawner` (the node that actually declares/emits `signal defeated`). The connection silently fails (`Attempt to connect nonexistent signal 'defeated'`), so the "defeated both Viles" achievement never fires for that encounter. Achievement-only, no gameplay/timing impact, left alone for now.
+
 ### 1. Charging a weapon (e.g. ThunderDancer) through a door transition silently loses the charge
 **File:** `src/Actors/Modules/Forced.gd`
 
