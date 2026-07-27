@@ -22,7 +22,8 @@ func on_finished_animation():
 	emit_signal("animation_finished")
 
 func on_finish(method, object) -> void :
-	connect("animation_finished", object, method)
+	if not is_connected("animation_finished", object, method):
+		connect("animation_finished", object, method)
 
 func has_finished_last() -> bool:
 	return has_finished(current_animation)
