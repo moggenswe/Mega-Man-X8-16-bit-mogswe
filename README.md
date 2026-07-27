@@ -1,6 +1,6 @@
 # Mega Man X8 16-bit — mogswe Speedrun Build
 
-This is a modified version of **Mega Man X8 16-bit v1.0.0.9, Tchy & Rose Xorn's Speedrun Version v1.0.0.8**.
+This is **Mega Man X8 16-bit v1.0.0.9, Tchy, Rose Xorn & Mogswe's Speedrun Version v1.0.0.9** — built on top of Tchy & Rose Xorn's Speedrun Version v1.0.0.8.
 
 This project is a fork of the original [Mega Man X8 16-bit](https://github.com/Tchy258/Mega-Man-X8-16-bit-csharp-version) fangame. No original source code for this speedrun fork survived; this repository was rebuilt by decompiling/recovering the compiled game (via [GDRE Tools](https://github.com/GDRETools/gdsdecomp)) and applying the minimal set of bug fixes documented in [CHANGELOG.md](CHANGELOG.md) so the game runs correctly, both from source and as a standalone Windows build.
 
@@ -26,6 +26,7 @@ Mega Man X8 16-bit is a reimagining of the PS2 original with SNES styled graphic
 - HeaxDePolo, ZafersanToksoz, QuartoDoDu, KaneTV, JulinhoRockman, itzBruHere, OlimTR, CalebHart42, Nostalgia_Games_BR, Meruziin, Fubadas, BadGokuH, Vubidugil, Fixxer0, Bacaxi15, Xopa, MazaKoopa, Orlandobrx, LuizTeles, Zekinoma - Special Thanks
 
 - Tchy & Rose Xorn - Speedrun Version (v1.0.0.8), the version this build is based on
+- Mogswe - Bug fixes and debug tooling, Speedrun Version (v1.0.0.9)
 
 ## Notice
 
