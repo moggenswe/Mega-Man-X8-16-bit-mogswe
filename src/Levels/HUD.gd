@@ -20,7 +20,9 @@ onready var ride_hp: TextureProgress = $"Ride Bar/textureProgress"
 
 
 onready var rec_info: RichTextLabel = $"Rec Info"
-onready var boss_fight_info: RichTextLabel = $"Boss Fight Info"
+onready var boss_fight_info: PanelContainer = $"Boss Fight Info"
+onready var boss_fight_info_label: Label = $"Boss Fight Info/Text"
+onready var boss_fight_info_tween: = TweenController.new(boss_fight_info, false)
 
 onready var black_screen = $BlackScreen
 onready var white_screen = $WhiteScreen
@@ -39,6 +41,9 @@ var debugging_character
 var chronometering: = true
 var chronotimer: = 0.0
 
+var boss_fight_info_fading_out: = false
+var boss_fight_info_fading_in: = false
+
 var last_message
 
 var ride_hp_tween: SceneTreeTween
@@ -56,15 +61,6 @@ func _ready() -> void :
 	black_screen.visible = true
 	white_screen.visible = false
 	boss_hp_filled = false
-	# Every boss death washes the screen with BossDeath.gd's background_light
-	# flash (tweens to near-white) - plain white/light debug text disappears
-	# into it right when the panel matters most. Red reads on both that flash
-	# and the game's normal dark backgrounds. Guarded because reload_current_scene()
-	# has a known pre-existing flakiness around freshly-instanced child nodes
-	# (see the "Timer not added to SceneTree" issue noted elsewhere) that can
-	# occasionally leave this onready reference null after a level reload.
-	if boss_fight_info:
-		boss_fight_info.add_color_override("default_color", Color(1.0, 0.16, 0.16))
 	if show_boss_bar:
 		Event.listen("boss_health_appear", self, "setup_boss_health")
 		Event.listen("boss_health_hide", self, "hide_boss_hp")
@@ -101,11 +97,49 @@ func show_debug(show = true) -> void :
 	update_boss_fight_info_visibility()
 
 func update_boss_fight_info_visibility() -> void :
-	# Only shown from the kill moment onward (GameManager.debug_boss_fight_show_result),
-	# not during the fight itself - showing it live covered too much of the gameplay.
-	# Stays up until GameManager.debug_boss_fight_reset() clears it on reaching stage select.
+	# Visible for the entire fight (from the moment the boss becomes hittable)
+	# through the kill/white-flash/result window, until GameManager.debug_boss_fight_reset()
+	# clears it on reaching stage select (or on Vile teleporting away).
 	if boss_fight_info:
-		boss_fight_info.visible = debug_mode_on and GameManager.debug_boss_fight_show_result
+		boss_fight_info.visible = debug_mode_on and (GameManager.debug_boss_fight_active or GameManager.debug_boss_fight_show_result)
+
+func update_boss_fight_info_position() -> void :
+	if not boss_fight_info:
+		return
+	# Right edge pinned 2px left of the Boss Bar (rect x=377), growing leftward
+	# as the PanelContainer's auto-sized width changes with its text content.
+	boss_fight_info.rect_position = Vector2(375.0 - boss_fight_info.rect_size.x, 24.0)
+
+func update_boss_fight_info_fade() -> void :
+	if not boss_fight_info:
+		return
+	if player_is_near_boss_fight_info():
+		fade_boss_fight_info_out()
+	else:
+		fade_boss_fight_info_in()
+
+func player_is_near_boss_fight_info() -> bool:
+	if not is_instance_valid(GameManager.player):
+		return false
+	var screencenter = GameManager.camera.get_camera_screen_center()
+	# Same "near the right-side bar" check as BossBar.player_is_near_lifebar(),
+	# just parameterized on this box's own (dynamic) width instead of a fixed constant.
+	return GameManager.get_player_position().x > screencenter.x + 175.0 - (2.0 * boss_fight_info.rect_size.x) and \
+	GameManager.get_player_position().y < screencenter.y + 10
+
+func fade_boss_fight_info_out() -> void :
+	if not boss_fight_info_fading_out:
+		boss_fight_info_fading_out = true
+		boss_fight_info_fading_in = false
+		boss_fight_info_tween.reset()
+		boss_fight_info_tween.attribute("self_modulate:a", 0.1, 0.1)
+
+func fade_boss_fight_info_in() -> void :
+	if not boss_fight_info_fading_in:
+		boss_fight_info_fading_in = true
+		boss_fight_info_fading_out = false
+		boss_fight_info_tween.reset()
+		boss_fight_info_tween.attribute("self_modulate:a", 1.0, 0.6)
 
 
 func stop_chronometer() -> void :
@@ -180,7 +214,10 @@ func _process(delta: float) -> void :
 	b_info.text += "\n" + show_boss_health_and_weapon(delta)
 	update_boss_fight_info_visibility()
 	if boss_fight_info and boss_fight_info.visible:
-		boss_fight_info.text = show_boss_fight_info()
+		if boss_fight_info_label:
+			boss_fight_info_label.text = show_boss_fight_info()
+		update_boss_fight_info_position()
+		update_boss_fight_info_fade()
 
 	timer += delta
 	if chronometering:
@@ -190,10 +227,18 @@ func _process(delta: float) -> void :
 
 func show_boss_fight_info() -> String:
 	if GameManager.debug_boss_fight_start_msec <= 0.0:
-		return "Boss Fight\n(no boss engaged yet)"
-	var text: = "Boss Fight\n"
+		return "(no boss engaged yet)"
+	var text: = ""
+	var max_hp: = int(round(GameManager.debug_boss_fight_max_hp))
+	var current_hp: = int(round(GameManager.debug_boss_fight_current_hp))
+	if current_hp >= max_hp:
+		text += str(max_hp) + "\n"
+	else:
+		text += str(max_hp) + " / " + str(current_hp) + "\n"
 	text += "Kill Time: " + Tools.get_readable_time(GameManager.debug_boss_fight_kill_time()) + "\n"
 	text += "DPS: " + str(round(GameManager.debug_boss_fight_dps() * 10) / 10.0) + "\n"
+	for desperation_time in GameManager.debug_boss_fight_desperation_log:
+		text += "Desperation at " + Tools.get_readable_time(desperation_time) + "\n"
 	text += "\nDamage per weapon:\n"
 	for weapon_name in GameManager.debug_boss_damage_log:
 		var dmg = GameManager.debug_boss_damage_log[weapon_name]

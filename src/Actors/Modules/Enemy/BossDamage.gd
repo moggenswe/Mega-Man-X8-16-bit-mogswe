@@ -43,7 +43,7 @@ func remove_weakness(weakness: String):
 func activate_get_hit():
 	can_get_hit = true
 	activate()
-	GameManager.debug_boss_fight_start(character.name)
+	GameManager.debug_boss_fight_start(character.name, character.max_health)
 
 func should_call_hit(_inflicter) -> bool:
 	return can_get_hit
@@ -74,7 +74,7 @@ func reduce_health(_damage, inflicter) -> void :
 	emit_signal("took_damage")
 	emit_signal("got_hit", inflicter)
 	increment_pds(dmg_value)
-	GameManager.debug_boss_fight_log_hit(dmg_value, inflicter.name)
+	GameManager.debug_boss_fight_log_hit(dmg_value, inflicter.name, character.current_health)
 
 func is_weakness(inflicter) -> bool:
 	for word in weakenesses:

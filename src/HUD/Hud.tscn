@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://src/Levels/HUD.gd" type="Script" id=1]
 [ext_resource path="res://src/HUD/BossBar.gd" type="Script" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://src/HUD/R2_bar.png" type="Texture" id=21]
 [ext_resource path="res://src/Effects/Materials/crt_shader_1.tres" type="Material" id=22]
 [ext_resource path="res://src/HUD/IGTDisplayScene.tscn" type="PackedScene" id=23]
+[ext_resource path="res://src/Fonts/FUTRFW.TTF" type="DynamicFontData" id=24]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -36,6 +37,24 @@ shader_param/Alpha_Blink = 0.0
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 15 )
 region = Rect2( 3, 3, 10, 10 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+content_margin_left = 7.0
+content_margin_top = 7.0
+content_margin_right = 7.0
+content_margin_bottom = 7.0
+
+[sub_resource type="DynamicFont" id=5]
+size = 4
+extra_spacing_bottom = -2
+extra_spacing_char = -1
+font_data = ExtResource( 24 )
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 17 )
@@ -82,15 +101,21 @@ mouse_filter = 2
 custom_fonts/normal_font = ExtResource( 8 )
 text = "Input Info"
 
-[node name="Boss Fight Info" type="RichTextLabel" parent="."]
+[node name="Boss Fight Info" type="PanelContainer" parent="."]
 visible = false
 self_modulate = Color( 1, 1, 1, 1 )
-margin_left = 2.0
-margin_top = 110.0
-margin_right = 258.0
-margin_bottom = 220.0
+margin_left = 200.0
+margin_top = 24.0
+margin_right = 375.0
+margin_bottom = 42.0
 mouse_filter = 2
-custom_fonts/normal_font = ExtResource( 8 )
+custom_styles/panel = SubResource( 4 )
+
+[node name="Text" type="Label" parent="Boss Fight Info"]
+margin_right = 175.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Boss Fight"
 
 [node name="textureRect" type="TextureRect" parent="."]

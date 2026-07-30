@@ -66,24 +66,42 @@ var debug_boss_fight_active: = false
 var debug_boss_fight_start_msec: = 0.0
 var debug_boss_fight_end_msec: = 0.0
 var debug_boss_damage_log: Dictionary = {}
+# Tracked here (rather than read live off the boss node from the HUD) because
+# the HUD's own `boss` reference goes null around the death sequence - right
+# when the result panel still needs to keep showing the final HP.
+var debug_boss_fight_max_hp: = 0.0
+var debug_boss_fight_current_hp: = 0.0
+# One entry (elapsed fight-seconds) per boss/phase that entered its
+# desperation attack - logged from BossAI.decide_next_attack().
+var debug_boss_fight_desperation_log: Array = []
 # The HUD only displays the fight info from the kill moment onward (showing
 # it live covered too much of the gameplay) - this flag is what it watches to
 # know when to start, and it's cleared again once stage select is reached.
 var debug_boss_fight_show_result: = false
 
-func debug_boss_fight_start(_boss_name: String = "") -> void :
+func debug_boss_fight_start(_boss_name: String = "", max_hp: float = 0.0) -> void :
 	debug_boss_fight_active = true
 	debug_boss_fight_start_msec = OS.get_ticks_msec()
 	debug_boss_fight_end_msec = 0.0
 	debug_boss_damage_log = {}
+	debug_boss_fight_max_hp = max_hp
+	debug_boss_fight_current_hp = max_hp
+	debug_boss_fight_desperation_log = []
 	debug_boss_fight_show_result = false
 
-func debug_boss_fight_log_hit(amount: float, weapon_name: String) -> void :
+func debug_boss_fight_log_hit(amount: float, weapon_name: String, current_hp: float = -1.0) -> void :
 	if not debug_boss_fight_active:
 		return
 	if not debug_boss_damage_log.has(weapon_name):
 		debug_boss_damage_log[weapon_name] = 0.0
 	debug_boss_damage_log[weapon_name] += amount
+	if current_hp >= 0.0:
+		debug_boss_fight_current_hp = current_hp
+
+func debug_boss_fight_log_desperation() -> void :
+	if not debug_boss_fight_active:
+		return
+	debug_boss_fight_desperation_log.append(debug_boss_fight_kill_time())
 
 func debug_boss_fight_end() -> void :
 	if not debug_boss_fight_active:
@@ -97,6 +115,9 @@ func debug_boss_fight_reset() -> void :
 	debug_boss_fight_start_msec = 0.0
 	debug_boss_fight_end_msec = 0.0
 	debug_boss_damage_log = {}
+	debug_boss_fight_max_hp = 0.0
+	debug_boss_fight_current_hp = 0.0
+	debug_boss_fight_desperation_log = []
 	debug_boss_fight_show_result = false
 
 func debug_boss_fight_kill_time() -> float:

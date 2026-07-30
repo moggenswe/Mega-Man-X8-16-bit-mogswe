@@ -171,6 +171,7 @@ func decide_next_attack():
 		if character.current_health <= floor(character.max_health * desperation_threshold) - 1:
 			Log("Using Desperation Attack")
 			used_desperation = true
+			GameManager.debug_boss_fight_log_desperation()
 			if play_desperation_music:
 				Event.emit_signal("play_angry_boss_music")
 			return desperation_attack
