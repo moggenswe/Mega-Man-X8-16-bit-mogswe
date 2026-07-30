@@ -103,12 +103,18 @@ func update_boss_fight_info_visibility() -> void :
 	if boss_fight_info:
 		boss_fight_info.visible = debug_mode_on and (GameManager.debug_boss_fight_active or GameManager.debug_boss_fight_show_result)
 
+func get_boss_fight_info_display_width() -> float:
+	# rect_size is the PanelContainer's unscaled auto-sized width; rect_scale
+	# (0.6 - the box is rendered 40% smaller than its font/padding would imply)
+	# is applied on top, so the actual on-screen width is the product of both.
+	return boss_fight_info.rect_size.x * boss_fight_info.rect_scale.x
+
 func update_boss_fight_info_position() -> void :
 	if not boss_fight_info:
 		return
 	# Right edge pinned 2px left of the Boss Bar (rect x=377), growing leftward
 	# as the PanelContainer's auto-sized width changes with its text content.
-	boss_fight_info.rect_position = Vector2(375.0 - boss_fight_info.rect_size.x, 24.0)
+	boss_fight_info.rect_position = Vector2(375.0 - get_boss_fight_info_display_width(), 24.0)
 
 func update_boss_fight_info_fade() -> void :
 	if not boss_fight_info:
@@ -123,8 +129,8 @@ func player_is_near_boss_fight_info() -> bool:
 		return false
 	var screencenter = GameManager.camera.get_camera_screen_center()
 	# Same "near the right-side bar" check as BossBar.player_is_near_lifebar(),
-	# just parameterized on this box's own (dynamic) width instead of a fixed constant.
-	return GameManager.get_player_position().x > screencenter.x + 175.0 - (2.0 * boss_fight_info.rect_size.x) and \
+	# just parameterized on this box's own (dynamic, scaled) width instead of a fixed constant.
+	return GameManager.get_player_position().x > screencenter.x + 175.0 - (2.0 * get_boss_fight_info_display_width()) and \
 	GameManager.get_player_position().y < screencenter.y + 10
 
 func fade_boss_fight_info_out() -> void :

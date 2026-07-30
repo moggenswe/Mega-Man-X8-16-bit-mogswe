@@ -331,6 +331,7 @@ func go_to_stage_intro(stage: StageInfo) -> void :
 
 func restart_level():
 	print_debug("::::::::  Restarting level")
+	debug_boss_fight_reset()
 	get_tree().reload_current_scene()
 	GameManager.force_unpause()
 	on_level_start()

@@ -85,6 +85,10 @@ func apply_data():
 		GameManager.collectibles = game_data["collectibles"]
 		GlobalVariables.load_variables(game_data["variables"])
 		Configurations.load_variables(game_data["configs"])
+		# ShowDebug is a per-session dev toggle, not a persistent setting - force
+		# it off on every load so debug mode never carries over from a previous
+		# session; re-enabling it always requires going back into the menu.
+		Configurations.set("ShowDebug", false)
 		Achievements.load_achievements(game_data["achievements"])
 		InputManager.load_modified_keys(game_data["keys"])
 		call_deferred("emit_signal", "loaded")
